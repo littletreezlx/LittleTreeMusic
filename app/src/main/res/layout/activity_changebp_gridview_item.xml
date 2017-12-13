@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/changebp_gridview_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+
+    android:background="@color/透明">
+
+    <ImageView
+        android:id="@+id/changebp_gridview_image"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_centerHorizontal="true"
+        />
+
+
+
+</android.support.percent.PercentRelativeLayout>

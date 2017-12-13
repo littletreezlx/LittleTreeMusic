@@ -1,0 +1,10 @@
+<litepal>
+    <dbname value="SongList"> </dbname>
+    <version value="1"> </version>
+
+    <list>
+        <mapping class="com.example.littletreemusic.table.Song"></mapping>
+        <mapping class="com.example.littletreemusic.table.Label"></mapping>
+    </list>
+
+</litepal>
