@@ -74,20 +74,22 @@ public class ViewPager_view0 extends View {
         int screen_w = dm.widthPixels;
         int screen_h = dm.heightPixels;
 
-        if (mPoints == null || mPoints.length < mBytes.length * 4) {
-            mPoints = new float[mBytes.length * 4];
-        }
-
-        for (int i = 0; i < 9; i++) {
-            if (mBytes[i] < 0) {
-                mBytes[i] = 127;
+        if (mBytes != null){
+            if (mPoints == null || mPoints.length < mBytes.length * 4) {
+                mPoints = new float[mBytes.length * 4];
             }
-            mPoints[i * 4] = mRect.width() * i / 9;
-            mPoints[i * 4 + 1] = mRect.height() / 2;
-            mPoints[i * 4 + 2] = mRect.width() * i / 9;
-            mPoints[i * 4 + 3] = 2 + mRect.height() / 2 + mBytes[i];
+
+            for (int i = 0; i < 9; i++) {
+                if (mBytes[i] < 0) {
+                    mBytes[i] = 127;
+                }
+                mPoints[i * 4] = mRect.width() * i / 9;
+                mPoints[i * 4 + 1] = mRect.height() / 2;
+                mPoints[i * 4 + 2] = mRect.width() * i / 9;
+                mPoints[i * 4 + 3] = 2 + mRect.height() / 2 + mBytes[i];
+            }
+            canvas.drawLines(mPoints, mPaint);
         }
-        canvas.drawLines(mPoints, mPaint);
 
 //        postInvalidateDelayed(100);
     }

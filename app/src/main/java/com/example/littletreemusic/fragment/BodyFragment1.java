@@ -69,21 +69,6 @@ public class BodyFragment1 extends Fragment {
 
         recyclerViewAdapter0 = new RecyclerViewAdapter0(getContext(), songs);
 
-//        recyclerViewAdapter0.setOnRecyclerClickListener(new RecyclerViewAdapter0.OnRecyclerClickListener() {
-//            @Override
-//            public void onImageClick(View view, int position) {
-//
-//            }
-//
-//            @Override
-//            public void onTextClick(View view, int position) {
-//
-//
-//            }
-//        });
-
-
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter0);

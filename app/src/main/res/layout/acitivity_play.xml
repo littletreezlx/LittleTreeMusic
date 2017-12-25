@@ -24,15 +24,14 @@
             android:layout_centerHorizontal="true"
             android:text="歌名"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:ellipsize="marquee"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="center_horizontal"
-            android:lines="1"
+            android:singleLine="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:textColor="@color/white"
-            android:textSize="40sp"
-            android:maxLines="1"/>
+            android:textSize="30sp"
+           />
 
         <TextView
             android:id="@+id/play_artist"
@@ -41,7 +40,7 @@
             android:layout_below="@id/play_title"
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="@color/white"
             android:text="歌手"
             />
@@ -62,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@id/header_layout"
-        app:layout_heightPercent="70%">
+        app:layout_heightPercent="65%">
 
     </android.support.v4.view.ViewPager>
 
@@ -82,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:thumb="@drawable/icon_seekbar_thumb"
+                android:thumb="@drawable/seekbar_thumb"
                 android:progress="0"
                 android:max="100"
                 android:layout_margin="3dp"
@@ -112,7 +111,14 @@
             android:layout_height="0dp"
             android:layout_alignParentBottom="true"
             android:background="@color/透明"
-            app:layout_heightPercent="10%">
+            app:layout_heightPercent="12%">
+
+            <Button
+                android:id="@+id/play_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/icon_search" />
 
             <Button
                 android:id="@+id/play_play"
@@ -130,33 +136,29 @@
                 android:background="@drawable/icon_pause" />
 
 
+
+            <Button
+                android:id="@+id/play_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_menu" />
+
             <Button
                 android:id="@+id/play_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/play_play"
+                android:layout_toLeftOf="@id/play_mode"
                 android:background="@drawable/icon_next" />
 
             <Button
                 android:id="@+id/play_previous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/play_play"
+                android:layout_toRightOf="@id/play_tag"
                 android:background="@drawable/icon_previous" />
 
-            <Button
-                android:id="@+id/play_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/play_next"
-                android:background="@drawable/icon_menu" />
 
-            <Button
-                android:id="@+id/play_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/play_previous"
-                android:background="@drawable/icon_search" />
 
     </RelativeLayout>
 

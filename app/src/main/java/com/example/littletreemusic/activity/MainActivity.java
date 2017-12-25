@@ -257,13 +257,20 @@ public class MainActivity extends FragmentActivity {
     }
     public void back(){
         fm.beginTransaction().remove(title1).remove(body1).show(title0).show(body0).commit();
+        title1=null;
+        body1=null;
     }
 
     @Override
     public void onBackPressed() {
-        //方式一：将此任务转向后台
-        moveTaskToBack(false);
-        super.onBackPressed();
+        if(title1 != null){
+            back();
+        }else {
+            //方式一：将此任务转向后台
+            moveTaskToBack(false);
+            //super.onBackPressed();
+        }
+
         //方式二：返回手机的主屏幕
     /*Intent intent = new Intent(Intent.ACTION_MAIN);
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -271,41 +278,8 @@ public class MainActivity extends FragmentActivity {
     startActivity(intent);*/
     }
 
-
-
     public DrawerLayout getDrawerLayout(){
         return drawerLayout;
     }
-//    private ServiceConnection connection = new ServiceConnection() {
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//        }
-//
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//
-//        }
-//    };
-
-
-//    private ServiceConnection serviceConnection=new ServiceConnection() {
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//
-//        }
-//    }
-
-
-
-
-
-
-
 
 }

@@ -53,10 +53,6 @@ public class BottomFragment0 extends Fragment implements View.OnClickListener{
         View view= inflater.inflate(R.layout.fragment_main_bottom,container,false);
 
         mbottomtemp=(RelativeLayout)view.findViewById(R.id.bottom_temp);
-
-//        navigationView=(NavigationView)view.findViewById(R.id.nav_view);
-        MainActivity mainActivity=(MainActivity)getActivity();
-        drawerLayout=mainActivity.getDrawerLayout();
         imgnote=(ImageView)view.findViewById(R.id.fragment_main_bottom_imgnote);
         imgstart=(ImageView)view.findViewById(R.id.fragment_main_bottom_imgstart);
         imgpause=(ImageView)view.findViewById(R.id.fragment_main_bottom_imgpause);
@@ -65,26 +61,16 @@ public class BottomFragment0 extends Fragment implements View.OnClickListener{
         text0=(TextView)view.findViewById(R.id.fragment_main_bottom_text0);
         text1=(TextView)view.findViewById(R.id.fragment_main_bottom_text1);
 
-
-        SharedPreferences sp=getActivity().getSharedPreferences("sp0",MODE_PRIVATE);
-        playingTitle=sp.getString("playing_title","noTitle");
-        if (!playingTitle.equals("noTitle")){
-            text0.setText(playingTitle);
-        }
-        playingArtist=sp.getString("playing_artist","noArtist");
-        if (!playingArtist.equals("noArtist")){
-            text1.setText(playingArtist);
-        }
-
-
         imgnote.setOnClickListener(this);
         imgstart.setOnClickListener(this);
         imgpause.setOnClickListener(this);
         imgnext.setOnClickListener(this);
         imgmenu.setOnClickListener(this);
 
+        updateTAA();
+//广播
+//        localBroadcastManager=LocalBroadcastManager.getInstance(getContext());
 
-        localBroadcastManager=LocalBroadcastManager.getInstance(getContext());
         intentFilter=new IntentFilter();
         intentFilter.addAction("startTOpause");
         intentFilter.addAction("pauseTOstart");
@@ -100,8 +86,9 @@ public class BottomFragment0 extends Fragment implements View.OnClickListener{
 //        navigationView.setItemTextColor(csl);
 //        navigationView.getMenu().getItem(0).setChecked(true);
 
-        serviceIntent=new Intent(getContext(), MusicService.class);
 
+
+        serviceIntent=new Intent(getContext(), MusicService.class);
         serviceConnection=new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -109,17 +96,7 @@ public class BottomFragment0 extends Fragment implements View.OnClickListener{
                 musicService.setOnSongChangedListener(new MusicService.OnSongChangedListener() {
                     @Override
                     public void OnSongChangedListener1(String title, String artist) {
-
-                        SharedPreferences.Editor editor=getActivity().getSharedPreferences("sp0",MODE_PRIVATE).edit();
-
-                        editor.remove("playing_title");
-                        editor.remove("playing_artist");
-                        editor.putString("playing_title",title);
-                        editor.putString("playing_artist",artist);
-                        editor.apply();
-
-                        text0.setText(title);
-                        text1.setText(artist);
+                        updateTAA();
                     }
                 });
             }
@@ -129,8 +106,6 @@ public class BottomFragment0 extends Fragment implements View.OnClickListener{
             }
         };
         getActivity().bindService(serviceIntent,serviceConnection,Context.BIND_AUTO_CREATE);
-
-
 
         return view;
     }
@@ -145,39 +120,41 @@ public class BottomFragment0 extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.fragment_main_bottom_imgstart:
-                imgstart.setSelected(true);
-                Intent it_play = new Intent(getActivity(), MusicService.class);
-                it_play.putExtra("mode","bottom0_op");
-                it_play.putExtra("op","bottom_start");
-                getActivity().startService(it_play);
+//                imgstart.setSelected(true);
+//                Intent it_play = new Intent(getActivity(), MusicService.class);
+//                it_play.putExtra("mode","bottom0_op");
+//                it_play.putExtra("op","bottom_start");
+//                getActivity().startService(it_play);
+
+                if (musicService != null){
+                    musicService.start();
+                }
                 break;
 
             case R.id.fragment_main_bottom_imgpause:
-                imgpause.setSelected(true);
-                Intent it_pause = new Intent(getActivity(), MusicService.class);
-                it_pause.putExtra("mode","bottom0_op");
-                it_pause.putExtra("op","bottom_pause");
-                getActivity().startService(it_pause);
+                if (musicService != null){
+                    musicService.pause();
+                }
 
                 break;
 
             case R.id.fragment_main_bottom_imgnext:
-                imgnext.setSelected(true);
-                Intent it_next = new Intent(getActivity(), MusicService.class);
-                it_next.putExtra("mode","bottom0_op");
-                it_next.putExtra("op","bottom_next");
-                getActivity().startService(it_next);
+                if (musicService != null){
+                    musicService.toNext();
+                }
                 break;
 
 
             case R.id.fragment_main_bottom_imgmenu:
+                MainActivity mainActivity=(MainActivity)getActivity();
+                drawerLayout=mainActivity.getDrawerLayout();
                 drawerLayout.openDrawer(GravityCompat.END);
-
                 break;
 
             default:break;
         }
     }
+
 
     class Receiver extends BroadcastReceiver {
         @Override
@@ -189,16 +166,25 @@ public class BottomFragment0 extends Fragment implements View.OnClickListener{
             else if (intent.getAction().equals("pauseTOstart")){
                 imgstart.setVisibility(View.VISIBLE);
                 imgpause.setVisibility(View.GONE);}
-//
-//            if (intent.getAction().equals("titleANDartist")){
-//                title=intent.getStringExtra("title");
-//                artist=intent.getStringExtra("artist");
-//                text0.setText(title);
-//                text1.setText(artist);
-//            }
-        }
 
+        }
     }
+
+
+    //更新歌名，歌手
+    private void updateTAA(){
+        SharedPreferences sp=getActivity().getSharedPreferences("sp0",MODE_PRIVATE);
+        playingTitle=sp.getString("playing_title","noTitle");
+        if (!playingTitle.equals("noTitle")){
+            text0.setText(playingTitle);
+        }
+        playingArtist=sp.getString("playing_artist","noArtist");
+        if (!playingArtist.equals("noArtist")){
+            text1.setText(playingArtist);
+        }
+    }
+
+
 
     @Override
     public void onDestroy(){

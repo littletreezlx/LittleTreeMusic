@@ -16,14 +16,13 @@ public class Song extends DataSupport {
     private int id,isFavourite;
     private long idanother,duration,size;
     private String artist,title,uri;
-    private List<Label> labelList=new ArrayList<>();
+    private List<String> tagList=new ArrayList<>();
 
-    public List<Label> getLabelList() {
-        return labelList;
+    public List<String> getTagList() {
+        return tagList;
     }
-
-    public void setLabelList(List<Label> labelList) {
-        this.labelList = labelList;
+    public void setTagList(List<String> tagList) {
+        this.tagList = tagList;
     }
 
     public long getIdanother() {
