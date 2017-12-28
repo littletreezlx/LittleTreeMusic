@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.littletreemusic.R;
 import com.example.littletreemusic.activity.MainActivity;
@@ -41,26 +42,25 @@ public class BodyFragment0 extends Fragment {
                 MainActivity activity = (MainActivity) getActivity();
                 switch (position) {
                     case 0:
-                        activity.toMymusic();
+                        activity.toSongList(0);
                         break;
                     case 1:
-                        activity.toMyfavourite();
+                        activity.toSongList(1);
                         break;
+                    case 2:
+                        activity.toMyTags();
+                        break;
+                    case 3:
+                        Toast.makeText(getActivity(),"待添加",Toast.LENGTH_SHORT).show();
 
                     default:
                         break;
                 }
             }
         });
-
         mbodytemp=(RelativeLayout)view.findViewById(R.id.body_temp);
-
         return view;
     }
-
-
-
-
 
 
 }

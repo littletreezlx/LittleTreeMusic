@@ -3,8 +3,7 @@
     <version value="1"> </version>
 
     <list>
-        <mapping class="com.example.littletreemusic.table.Song"></mapping>
-        <mapping class="com.example.littletreemusic.table.Label"></mapping>
+        <mapping class="com.example.littletreemusic.model.Song"></mapping>
     </list>
 
 </litepal>

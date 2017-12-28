@@ -3,6 +3,7 @@ package com.example.littletreemusic.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -61,13 +63,7 @@ public class ChangebpActivity extends AppCompatActivity {
         bpGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferences.Editor editor=getSharedPreferences("sp0",MODE_PRIVATE).edit();
-                editor.remove("bp_default");
-                editor.remove("bp_album");
-                editor.putString("bp_default","bp_"+position);
-                editor.apply();
-                Intent bpIntent=new Intent("changeBP");
-                setResult(RESULT_OK,bpIntent);
+                showConfirmDialog(position);
             }
         });
 
@@ -92,6 +88,37 @@ public class ChangebpActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void showConfirmDialog(int position){
+
+        final int ps =position;
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("是否选择该图片?");
+        builder.setIcon(R.drawable.icon_checked);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() { //设置确定按钮
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor editor=getSharedPreferences("sp0",MODE_PRIVATE).edit();
+                editor.remove("bp_default");
+                editor.remove("bp_album");
+                editor.putString("bp_default","bp_"+ps);
+                editor.apply();
+                Intent bpIntent=new Intent("changeBP");
+                setResult(RESULT_OK,bpIntent);
+
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() { //设置取消按钮
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
     }
 
     public void openAlbum(){

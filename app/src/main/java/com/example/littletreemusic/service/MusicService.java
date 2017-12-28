@@ -12,7 +12,7 @@ import android.os.IBinder;
 
 import com.example.littletreemusic.R;
 import com.example.littletreemusic.activity.MainActivity;
-import com.example.littletreemusic.table.Song;
+import com.example.littletreemusic.model.Song;
 
 import org.litepal.crud.DataSupport;
 
@@ -27,15 +27,17 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public static String playinguristr;
     private String urinextstr,uriprestr,uristr,mode,playmode,title,artist;
     private int playingId=-1,currentTime,totalTime;
-    public boolean isPlaying;
+    public static boolean isPlaying;
     boolean isPaused;
     private Uri uri,urinext,uripre;
     private int position=-1;
-    public OnSongChangedListener mListener,onSongChangedListener;
+    public OnSongChangedListener mListener;
+    List<Song> songs;
+    Song nextSong,previousSong;
 
 
     public void setOnSongChangedListener(OnSongChangedListener onSongChangedListener){
-        this.onSongChangedListener=onSongChangedListener;
+        this.mListener=onSongChangedListener;
     }
 
 
@@ -47,16 +49,32 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mediaPlayer=new MediaPlayer();
         playmode="bySequence";
         SharedPreferences sp=getSharedPreferences("sp0",MODE_PRIVATE);
-        playinguristr=sp.getString("playing_title","noUri");
-        try {
-            uri=Uri.parse(playinguristr);
-            if (uri != null){
-                mediaPlayer.setDataSource(getApplicationContext(),uri);
+        playinguristr=sp.getString("playing_uri","noUri");
+        if (!playinguristr.equals("noUri")){
+
+                playingId=DataSupport.where("uri=?",playinguristr).find(Song.class).get(0).getId();
+
+            try {
+                uri=Uri.parse(playinguristr);
+                if (uri != null){
+                    mediaPlayer.setDataSource(getApplicationContext(),uri);
+                }
+                mediaPlayer.prepare();
+                mediaPlayer.setOnPreparedListener(this);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            mediaPlayer.prepare();
-            mediaPlayer.setOnPreparedListener(this);
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+//        播放结束后调用toNext
+        if (mediaPlayer != null){
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    if(playmode.equals("bySequence")){
+                        toNextSong(1);
+                    }
+                }
+            });
         }
 
 
@@ -95,12 +113,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 //        PendingIntent intent_next = PendingIntent.getBroadcast(this, 3, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 //        mRemoteViews.setOnClickPendingIntent(R.id.btn_custom_next, intent_next);
 
+
         //新建Builer对象
         Intent notificationIntent = new Intent(this,MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
         Notification notification = new Notification.Builder(this)
-                .setContentTitle(title)
-                .setContentText(artist)
+//                .setContentTitle(title)
+//                .setContentText(artist)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent).build();
         startForeground(1, notification);
@@ -111,93 +130,68 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     @Override
     public int onStartCommand(Intent intent,int flag,int startId){
 
-        this.mListener=onSongChangedListener;
 
-        mode=intent.getStringExtra("mode");
         this.position = intent.getIntExtra("position", -1);
         uristr = intent.getStringExtra("uri");
-
-        if (intent.getStringExtra("playmode") != null){
-            playmode=intent.getStringExtra("playmode");
-        }
-//        String mode=intent.getStringExtra("mode");
+//        if (intent.getStringExtra("playmode") != null){
+//            playmode=intent.getStringExtra("playmode");
+//        }
         if (uristr !=null){
             uri = Uri.parse(uristr);
         }
 
-        if (mode.equals("list_op")) {
-            if (!isPlaying && !isPaused) {
-                try {
-                    playinguristr = uristr;
-                    playingId=position;
-                    mediaPlayer.setDataSource(getApplicationContext(),uri);
-                    mediaPlayer.prepare();
-                    mediaPlayer.setOnPreparedListener(this);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mediaPlayer.start();
-                isPlaying = true;
-                isPaused=false;
-                Intent Intent=new Intent("startTOpause");
-                sendBroadcast(Intent);
-
+//        列表点击的歌曲不是当前播放的歌曲才会执行
+        if (position != playingId){
+            try {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setDataSource(getApplicationContext(),uri);
+                mediaPlayer.prepare();
+                mediaPlayer.setOnPreparedListener(this);
+                start();
+                playinguristr=uristr;
+                playingId=position;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
+
+//             else if (!playinguristr.equals(uristr)) {
+//        mediaPlayer.stop();
+//        try {
+//            mediaPlayer=new MediaPlayer();
+//            playinguristr = uristr;
+//            playingId=position;
+//            mediaPlayer.setDataSource(getApplicationContext(), uri);
+//            mediaPlayer.prepare();
+//            mediaPlayer.setOnPreparedListener(this);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        mediaPlayer.start();
+
 
             //如果音乐已播放，且选择的歌曲是正在播放的歌曲且未暂停
-            else if (isPlaying && playinguristr.equals(uristr) && !isPaused) {
-
-                mediaPlayer.pause();
-                isPlaying =false;
-                isPaused=true;
-                Intent Intent=new Intent("pauseTOstart");
-                sendBroadcast(Intent);
-            }
-
+//            else if (isPlaying && playinguristr.equals(uristr) && !isPaused) {
+//
+//                mediaPlayer.pause();
+//                isPlaying =false;
+//                isPaused=true;
+//                Intent Intent=new Intent("pauseTOstart");
+//                sendBroadcast(Intent);
+//            }
             //如果音乐已播放，且选择的歌曲是被暂停的歌曲
-            else if (!isPlaying && playinguristr.equals(uristr) && isPaused) {
-
-                mediaPlayer.start();
-                isPlaying =true;
-                isPaused=false;
-                Intent Intent=new Intent("startTOpause");
-                sendBroadcast(Intent);
-            }
+//            else if (!isPlaying && playinguristr.equals(uristr) && isPaused) {
+//
+//                mediaPlayer.start();
+//                isPlaying =true;
+//                isPaused=false;
+//                Intent Intent=new Intent("startTOpause");
+//                sendBroadcast(Intent);
+//            }
 
             //如果选择的歌曲！不！是正在播放的歌曲
-            else if (!playinguristr.equals(uristr)) {
-                mediaPlayer.stop();
-                try {
-                    mediaPlayer=new MediaPlayer();
-                    playinguristr = uristr;
-                    playingId=position;
-                    mediaPlayer.setDataSource(getApplicationContext(), uri);
-                    mediaPlayer.prepare();
-                    mediaPlayer.setOnPreparedListener(this);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mediaPlayer.start();
-                isPlaying = true;
-                isPaused=false;
-                Intent Intent=new Intent("startTOpause");
-                sendBroadcast(Intent);
-            }
-        }
-
-        //监听音乐播放完成
-        if (mediaPlayer != null){
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    if(playmode.equals("bySequence")){
-                        toNext();
-                    }
-                }
-            });
-        }
 
 //        if (playingId != -1){
 //            List<Song> thisSong=DataSupport.limit(1).offset(playingId).find(Song.class);
@@ -208,71 +202,56 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 //            taIntent.putExtra("artist",artist);
 //            sendBroadcast(taIntent);
 //        }
-
         return  START_STICKY;
     }
 
 
-    public void toNext(){
-        if (playingId != -1){
-            playingId++;
-            List<Song> nextSong=DataSupport.limit(1).offset(playingId).find(Song.class);
-            if (nextSong.size() !=0){
-                urinextstr=nextSong.get(0).getUri();
+    public void toNextSong(int nop){
+        switch (nop){
+            case 0:
+                playingId--;
+                break;
+            case 1:
+                playingId++;
+                break;
+            default:
+                break;
+        }
+        if (songs == null){
+            nextSong=DataSupport.limit(1).offset(playingId).find(Song.class).get(0);
+        }else {
+            if (playingId <songs.size()){
+                nextSong=songs.get(playingId);
+            }else {
+                nextSong=null;
             }
-            if (urinextstr !=null){
-                urinext = Uri.parse(urinextstr);
-                mediaPlayer.stop();
-                try {
-                    mediaPlayer=new MediaPlayer();
-                    mediaPlayer.setDataSource(getApplicationContext(),urinext);
-                    mediaPlayer.prepare();
-                    mediaPlayer.setOnPreparedListener(this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        }
+        if (nextSong != null){
+            urinextstr=nextSong.getUri();
+            urinext = Uri.parse(urinextstr);
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            try {
+                mediaPlayer=new MediaPlayer();
+                mediaPlayer.setDataSource(getApplicationContext(),urinext);
+                mediaPlayer.prepare();
+                mediaPlayer.setOnPreparedListener(this);
+                start();
                 playinguristr=urinextstr;
-                isPlaying=true;
-                isPaused=false;
-                Intent Intent=new Intent("startTOpause");
-                sendBroadcast(Intent);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }else {
+            mediaPlayer.stop();
+            mediaPlayer.release();
         }
-    }
 
-    public void toPrevious(){
-        if (playingId > 0){
-            playingId--;
-            List<Song> previousSong=DataSupport.limit(1).offset(playingId).find(Song.class);
-            if (previousSong.size() !=0){
-                uriprestr=previousSong.get(0).getUri();
-            }
-            if (uriprestr !=null){
-                uripre = Uri.parse(uriprestr);
-                mediaPlayer.stop();
-                try {
-                    mediaPlayer=new MediaPlayer();
-                    mediaPlayer.setDataSource(getApplicationContext(),uripre);
-                    mediaPlayer.prepare();
-                    mediaPlayer.setOnPreparedListener(this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                playinguristr=uriprestr;
-                isPlaying=true;
-                isPaused=false;
-                Intent Intent=new Intent("startTOpause");
-                sendBroadcast(Intent);
-            }
-        }
     }
 
     public void start(){
             mediaPlayer.start();
             isPlaying=true;
             isPaused=false;
-            Intent Intent=new Intent("startTOpause");
-            sendBroadcast(Intent);
     }
 
     public void pause(){
@@ -280,27 +259,17 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             mediaPlayer.pause();
             isPlaying=false;
             isPaused=true;
-            Intent Intent=new Intent("pauseTOstart");
-            sendBroadcast(Intent);
         }
     }
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer){
-        this.mListener=onSongChangedListener;
-        mediaPlayer.start();
-        List<Song> titleANDartist=DataSupport.where("uri=?",playinguristr).find(Song.class);
-        title=titleANDartist.get(0).getTitle();
-        artist=titleANDartist.get(0).getArtist();
-
+        if (mListener != null){
+            mListener.OnSongChanged();
+        }
         SharedPreferences.Editor editor=getSharedPreferences("sp0",MODE_PRIVATE).edit();
-        editor.remove("playing_title");
-        editor.remove("playing_artist");
-        editor.putString("playing_title",title);
-        editor.putString("playing_artist",artist);
+        editor.putString("playing_uri", playinguristr);
         editor.apply();
-
-        mListener.OnSongChangedListener1(title,artist);
     }
 
     @Override
@@ -323,7 +292,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             editor.putString("playing_uri", playinguristr);
             editor.apply();
         }
-
     if (mediaPlayer != null && mediaPlayer.isPlaying()) {
         mediaPlayer.stop();
         mediaPlayer.release();
@@ -333,13 +301,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     super.onDestroy();
     }
 
-
-
     public interface OnSongChangedListener{
-        void OnSongChangedListener1(String title,String artist);
+        void OnSongChanged();
     }
 
-//    以下全部为public开放方法
+
+//    以下全部为public开放方法!!!
+
     public MediaPlayer getMediaPlayer(){
         return mediaPlayer;
     }
@@ -364,5 +332,25 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
+    public void setSongList(List<Song> songList){
+        songs=songList;
+    }
+
+//
+//    懒汉式单例类.在第一次调用的时候实例化自己
+//    public class MediaPlayer {
+//
+//        private MediaPlayer() {}
+//        private MediaPlayer mediaPlayer=null;
+//        //静态工厂方法
+//        public MediaPlayer getMediaPlayer() {
+//            if (mediaPlayer == null) {
+//                mediaPlayer = new MediaPlayer();
+//            }
+//            return mediaPlayer;
+//        }
+//    }
+
 
 }
+

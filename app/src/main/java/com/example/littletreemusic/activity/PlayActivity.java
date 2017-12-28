@@ -1,11 +1,9 @@
 package com.example.littletreemusic.activity;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -36,7 +34,7 @@ import com.example.littletreemusic.adapter.ListViewAdapter0;
 import com.example.littletreemusic.adapter.ViewPagerAdapter0;
 import com.example.littletreemusic.animate.DepthPageTransformer;
 import com.example.littletreemusic.service.MusicService;
-import com.example.littletreemusic.table.Song;
+import com.example.littletreemusic.model.Song;
 import com.example.littletreemusic.view.ViewPager_view0;
 
 import org.litepal.crud.DataSupport;
@@ -49,21 +47,21 @@ import java.util.Set;
 
 public class PlayActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView text0,text1,text2,text3;
+    TextView text0,text1,text2,text3,text4;
+    ListView listView;
     Button backbtn,playbtn,pausebtn,nextbtn,previousbtn,tagbtn,modebtn;
     SeekBar seekBar;
     MusicService musicService;
-    int current_progress,currentTimeInt,totalTimeInt,cp;
-    String playingTitle,playingArtist,currentTime,totalTime,a,b,c,d,aa,bb;
+    int currentTimeInt,totalTimeInt,currentProgress;
+    String playingTitle,playingArtist,a,b,c,d,aa,bb;
     ViewPager viewPager;
     Handler handler;
     Bundle bundle0,bundle1;
     ServiceConnection serviceConnection;
     Visualizer mVisualizer;
-    IntentFilter intentFilter;
-    BroadcastReceiver receiver;
     Set<String> tagSet;
     ListViewAdapter0 adapter;
+    List<String> playingTags,tagList,checkedTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,24 +81,34 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         RelativeLayout playLayout = (RelativeLayout) findViewById(R.id.layout_play);
         playLayout.setBackgroundResource(R.drawable.bp_0);
 
+
         initView();
-        initBroadCast();
-        updateTAA();
+//        initBroadCast();
+        updateTATB();
 
         serviceConnection=new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 musicService=((MusicService.MusicBinder)service).getService();
+
+                musicService.getTotalTime();
+                totalTimeInt=musicService.getTotalTime()/1024;
+                seekBar.setMax(totalTimeInt);
+                c=String.valueOf(totalTimeInt/60);
+                d=String.valueOf(totalTimeInt%60);
+                text3.setText(c+":"+d);
+
                 musicService.setOnSongChangedListener(new MusicService.OnSongChangedListener() {
                     @Override
-                    public void OnSongChangedListener1(String title, String artist) {
-                        updateTAA();
-                        text2.setText("00:00");
+                    public void OnSongChanged() {
+                        updateTATB();
                         musicService.getTotalTime();
                         totalTimeInt=musicService.getTotalTime()/1024;
+                        seekBar.setMax(totalTimeInt);
                         c=String.valueOf(totalTimeInt/60);
                         d=String.valueOf(totalTimeInt%60);
                         text3.setText(c+":"+d);
+                        seekBar.setProgress(0);
 
                     }
                 });
@@ -120,14 +128,13 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                         try{
                         currentTimeInt = musicService.getCurrentTime() / 1024;
                         totalTimeInt = musicService.getTotalTime() / 1024;
-                        current_progress =currentTimeInt*100/totalTimeInt;
                         a = String.valueOf(currentTimeInt / 60);
                         b = String.valueOf(currentTimeInt % 60);
                         Message message = handler.obtainMessage();
                         bundle0 = new Bundle();
-                        bundle0.putInt("current_progress",current_progress);
                         bundle0.putString("a", a);
                         bundle0.putString("b", b);
+                        bundle0.putInt("currentInt",currentTimeInt);
                         message.setData(bundle0);
                         handler.sendMessage(message);
                         Thread.sleep(1000);
@@ -182,49 +189,57 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
 //        seekBar
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            int manualProgress;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                seekBar.setProgress(progress);
+//                seekBar.setProgress(progress);
+                manualProgress=progress;
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
+                musicService.pause();
 //                拖动歌词，待添加
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                int setProgressTime=seekBar.getProgress()*1024;
+                int setProgressTime=manualProgress*1024;
                 musicService.setProgress(setProgressTime);
+                musicService.start();
             }
         });
 
-          handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                bundle1=msg.getData();
-                cp=bundle1.getInt("current_progress",0);
-                aa=bundle1.getString("a","0");
-                bb=bundle1.getString("b","0");
-                seekBar.setProgress(cp);
-                text2.setText(aa + ":" + bb);
-            }
-        };
+          handler = new SeekBarHandler();
+
     }
 
-    class Receiver extends BroadcastReceiver {
+    class SeekBarHandler extends android.os.Handler{
         @Override
-        public void onReceive(Context context, Intent intent){
-
-            if (intent.getAction().equals("startTOpause")){
-                playbtn.setVisibility(View.GONE);
-                pausebtn.setVisibility(View.VISIBLE);}
-            else if (intent.getAction().equals("pauseTOstart")){
-                playbtn.setVisibility(View.VISIBLE);
-                pausebtn.setVisibility(View.GONE);}
+        public void handleMessage(Message msg) {
+            bundle1=msg.getData();
+            aa=bundle1.getString("a","0");
+            bb=bundle1.getString("b","0");
+            currentProgress=bundle1.getInt("currentInt",0);
+            seekBar.setProgress(currentProgress);
+            text2.setText(aa + ":" + bb);
         }
     }
+
+//    class Receiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent){
+//
+//            if (intent.getAction().equals("startTOpause")){
+//                playbtn.setVisibility(View.GONE);
+//                pausebtn.setVisibility(View.VISIBLE);}
+//            else if (intent.getAction().equals("pauseTOstart")){
+//                playbtn.setVisibility(View.VISIBLE);
+//                pausebtn.setVisibility(View.GONE);}
+//        }
+//    }
 
     @Override
     public void onClick(View v){
@@ -239,13 +254,13 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.play_previous:
                 if (musicService != null){
-                    musicService.toPrevious();
+                    musicService.toNextSong(0);
                 }
                 break;
 
             case R.id.play_next:
                 if (musicService != null){
-                musicService.toNext();
+                musicService.toNextSong(1);
             }
                 break;
 
@@ -253,28 +268,29 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                 if (musicService != null){
                     musicService.start();
                 }
+                playbtn.setVisibility(View.GONE);
+                pausebtn.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.play_pause:
                 if (musicService != null){
                     musicService.pause();
                 }
+                playbtn.setVisibility(View.VISIBLE);
+                pausebtn.setVisibility(View.GONE);
                 break;
 
             case R.id.play_mode:
                 break;
-
         }
-
     }
-
-
 
     private void initView(){
         text0 = (TextView) findViewById(R.id.play_title);
         text1 = (TextView) findViewById(R.id.play_artist);
         text2 = (TextView) findViewById(R.id.current_time);
         text3 = (TextView) findViewById(R.id.final_time);
+        text4 = (TextView) findViewById(R.id.play_tags);
         seekBar = (SeekBar) findViewById(R.id.play_seekbar);
         backbtn = (Button) findViewById(R.id.play_back);
         playbtn = (Button) findViewById(R.id.play_play);
@@ -294,43 +310,67 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         modebtn.setOnClickListener(this);
     }
 
-    private void initBroadCast(){
-        intentFilter=new IntentFilter();
-        intentFilter.addAction("startTOpause");
-        intentFilter.addAction("pauseTOstart");
-        intentFilter.addAction("titleANDartist");
-        receiver=new Receiver();
-        registerReceiver(receiver,intentFilter);
+//    private void initBroadCast(){
+//        intentFilter=new IntentFilter();
+//        intentFilter.addAction("startTOpause");
+//        intentFilter.addAction("pauseTOstart");
+//        intentFilter.addAction("titleANDartist");
+//        receiver=new Receiver();
+//        registerReceiver(receiver,intentFilter);
+//    }
+
+//    更新歌名，标题和标签
+    private void updateTATB(){
+
+        String uristr=MusicService.playinguristr;
+        if (uristr == null){
+            SharedPreferences sp0 = getSharedPreferences("sp0", Context.MODE_PRIVATE);
+            uristr=sp0.getString("playing_uri","no_uri");
+        }
+        if (!uristr.equals("no_uri")){
+            List<Song> list0=DataSupport.where("uri=?",uristr).find(Song.class);
+            if (list0 != null && list0.size() != 0){
+                playingTitle=list0.get(0).getTitle();
+                playingArtist=list0.get(0).getArtist();
+                playingTags=list0.get(0).getTagList();
+                text0.setText(playingTitle);
+                text1.setText(playingArtist);
+                text4.setText("");
+                for (String t :playingTags){
+                    text4.append("  "+t);
+                }
+                if (MusicService.isPlaying){
+                    playbtn.setVisibility(View.GONE);
+                    pausebtn.setVisibility(View.VISIBLE);
+                }else {
+                    playbtn.setVisibility(View.VISIBLE);
+                    pausebtn.setVisibility(View.GONE);
+                }
+            }
+
+        }
+
     }
 
-    private void updateTAA(){
-        SharedPreferences sp0=getSharedPreferences("sp0",MODE_PRIVATE);
-        playingTitle=sp0.getString("playing_title","noTitle");
-        if (!playingTitle.equals("noTitle")){
-            text0.setText(playingTitle);
-        }
-        playingArtist=sp0.getString("playing_artist","noArtist");
-        if (!playingArtist.equals("noArtist")){
-            text1.setText(playingArtist);
-        }
-    }
 
-//    显示添加、应用、删除标签项和标签栏
+
+//    显示添加、应用标签项和标签栏
     private void actionAlertDialog(){
+
+        ListViewAdapter0.adcheckedTags.clear();
+
         AlertDialog.Builder builder0;
         AlertDialog alertDialog;
         SharedPreferences sp_tag=getSharedPreferences("sp_tag",MODE_PRIVATE);
         tagSet=sp_tag.getStringSet("TagSet",null);
-        ArrayList<String> list=new ArrayList<> ();
+        tagList=new ArrayList<> ();
         if (tagSet != null){
-            list.addAll(tagSet);
+            tagList.addAll(tagSet);
         }
         LayoutInflater inflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout=inflater.inflate(R.layout.listview_tag,(ViewGroup)findViewById(R.id.listview_tag));
         Button addTagBtn=(Button)layout.findViewById(R.id.add_tag) ;
         Button applyTagBtn=(Button)layout.findViewById(R.id.apply_tag) ;
-        Button deleteTagBtn=(Button)layout.findViewById(R.id.delete_tag) ;
-        Button removeTagBtn=(Button)layout.findViewById(R.id.remove_tag) ;
         addTagBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -343,35 +383,23 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                 showConfirmApplyDialog();
             }
         });
-        deleteTagBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmDeleteDialog();
-            }
-        });
-        removeTagBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showConfirmRemoveDialog();
-            }
-        });
 
 
-        ListView listView=(ListView)layout.findViewById(R.id.mylistview);
-        adapter=new ListViewAdapter0(this,list);
+        listView=(ListView)layout.findViewById(R.id.mylistview);
+        adapter=new ListViewAdapter0(this,tagList);
         listView.setAdapter(adapter);
+
         builder0=new AlertDialog.Builder(this);
         builder0.setView(layout);
         alertDialog=builder0.create();
         alertDialog.show();
-    }
 
+    }
 
 
 //    显示添加新标签的对话框
     private void showInputTagDialog(){
-        AlertDialog.Builder builder1;
-        builder1=new AlertDialog.Builder(this);
+        AlertDialog.Builder builder1=new AlertDialog.Builder(this);
         builder1.setTitle("添加新标签");
         builder1.setMessage("请添加新标签");
         final EditText et=new EditText(this);
@@ -388,13 +416,19 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                 }else{
                     SharedPreferences sp_tag=getSharedPreferences("sp_tag",MODE_PRIVATE);
                     tagSet=sp_tag.getStringSet("TagSet",null);
-                    if (tagSet == null){
-                        tagSet=new HashSet<String>();
-                    }
-                    tagSet.add(name);
-                    SharedPreferences.Editor editor=getSharedPreferences("sp0",MODE_PRIVATE).edit();
-                    editor.putStringSet("TagSet",tagSet);
+                    Set<String> tagSet2=new HashSet<>();
+                    tagSet2.addAll(tagSet);
+                    tagSet2.add(name);
+                    SharedPreferences.Editor editor=getSharedPreferences("sp_tag",MODE_PRIVATE).edit();
+                    editor.remove("TagSet");
+                    editor.putStringSet("TagSet",tagSet2);
                     editor.apply();
+
+                        tagList.clear();
+                        tagList.addAll(tagSet2);
+
+                    adapter.notifyDataSetChanged();
+//                    updateTagList();
                 }
             }
         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -405,92 +439,55 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         builder1.create().show();
     }
 
-    //    显示确定删除新标签的对话框
-    private void  showConfirmDeleteDialog(){
-        android.app.AlertDialog.Builder dialog=new android.app.AlertDialog.Builder(this);
-        dialog.setTitle("标签");
-        dialog.setMessage("确认删除选中标签吗？");
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences sp_tag=getSharedPreferences("sp_tag",MODE_PRIVATE);
-                tagSet=sp_tag.getStringSet("TagSet",null);
-                tagSet.removeAll(adapter.getCheckedTags());
-                SharedPreferences.Editor editor=getSharedPreferences("sp0",MODE_PRIVATE).edit();
-                editor.putStringSet("TagSet",tagSet);
-                editor.apply();
-            }
-        });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-    }
-
     //    显示确定应用新标签的对话框
     private void  showConfirmApplyDialog(){
-        android.app.AlertDialog.Builder dialog=new android.app.AlertDialog.Builder(this);
-        dialog.setTitle("标签");
-        dialog.setMessage("确认添加选中标签吗？");
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder3=new AlertDialog.Builder(this);
+        builder3.setTitle("标签");
+        builder3.setMessage("确认添加选中标签吗？");
+        builder3.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Song playingSong= DataSupport.where("uri=?", MusicService.playinguristr).find(Song.class).get(0);
-                List<String> pstList=playingSong.getTagList();
+//                tagList=playingSong.getTagList();
                 int updateId=playingSong.getId();
-                if (pstList == null){
-                    pstList=new ArrayList<>();
+                if (tagList == null){
+                    tagList=new ArrayList<>();
                 }
-                ArrayList checkedTags = adapter.getCheckedTags();
-                pstList.addAll(checkedTags);
+//                adapter.notifyDataSetChanged();
                 Song updateSong = new Song();
-                updateSong.setTagList(pstList);
+                updateSong.setTagList(ListViewAdapter0.adcheckedTags);
                 updateSong.update(updateId);
             }
         });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder3.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
             }
         });
-
+        builder3.create().show();
     }
-    //    显示确定移去新标签的对话框
-    private void  showConfirmRemoveDialog(){
-        android.app.AlertDialog.Builder dialog=new android.app.AlertDialog.Builder(this);
-        dialog.setTitle("标签");
-        dialog.setMessage("确认移去选中标签吗？");
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Song playingSong= DataSupport.where("uri=?", MusicService.playinguristr).find(Song.class).get(0);
-                List<String> pstList=playingSong.getTagList();
-                int updateId=playingSong.getId();
-                if (pstList == null){
-                    pstList=new ArrayList<>();
-                }
-                ArrayList checkedTags = adapter.getCheckedTags();
-                pstList.addAll(checkedTags);
-                Song updateSong = new Song();
-                updateSong.setTagList(pstList);
-                updateSong.update(updateId);
-            }
-        });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
+//
+//    private void panduan(){
+//        int itemsNumber=listView.getCount();
+//        for (int i=1;i<itemsNumber;i++){
+//            listView.getCheckedItemPosition()
+//        }
+//    }
+
+
+    //切换页面时更新播放状态
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateTATB();
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        unregisterReceiver(receiver);
+//        unregisterReceiver(receiver);
         unbindService(serviceConnection);
     }
 }

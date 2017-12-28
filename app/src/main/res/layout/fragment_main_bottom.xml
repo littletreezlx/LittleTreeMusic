@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_main_bottom"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,7 +18,7 @@
     android:id="@+id/fragment_main_bottom_text0"
     android:layout_width="130dp"
     android:layout_height="wrap_content"
-    android:text="title"
+    android:text="   title"
     android:textSize="18sp"
     android:textColor="#ffffff"
     android:ellipsize="end"
@@ -28,7 +29,7 @@
         android:id="@+id/fragment_main_bottom_text1"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:text="artist"
+        android:text="   artist"
         android:textSize="13sp"
         android:textColor="#ffffff"
         android:layout_toRightOf="@id/fragment_main_bottom_imgnote"
@@ -37,24 +38,23 @@
 
     <ImageView
         android:id="@+id/fragment_main_bottom_imgpause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/icon_pause"
         android:visibility="gone"
         android:layout_toLeftOf="@+id/fragment_main_bottom_imgnext"/>
 
     <ImageView
         android:id="@+id/fragment_main_bottom_imgstart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/icon_play"
-
         android:layout_toLeftOf="@+id/fragment_main_bottom_imgnext"/>
 
     <ImageView
         android:id="@+id/fragment_main_bottom_imgnext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/icon_next"
         android:layout_toLeftOf="@+id/fragment_main_bottom_imgmenu"
        />
@@ -62,8 +62,8 @@
 
     <ImageView
         android:id="@+id/fragment_main_bottom_imgmenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/icon_menu"
         android:layout_alignParentRight="true"/>
 

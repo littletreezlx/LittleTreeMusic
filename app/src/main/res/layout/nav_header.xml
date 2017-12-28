@@ -9,9 +9,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="menu"
+        android:text="菜单"
         android:textSize="40sp"
-        android:textColor="@color/white"
+        android:textColor="@color/白色"
         android:layout_centerHorizontal="true"/>
 
 

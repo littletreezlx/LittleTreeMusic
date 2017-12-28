@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.example.littletreemusic.table.Song;
+import com.example.littletreemusic.model.Song;
 
 import org.litepal.crud.DataSupport;
 
@@ -33,14 +33,7 @@ public class SearchSongs {
 //    };
     //    private String where = "mime_type in ('audio/mpeg','audio/x-ms-wma')  and is_music > 0 ";
     private static String sortOrder = MediaStore.Audio.Media.DATA;
-//
-//    public static SearchSongs searchStart(ContentResolver pontentResolver) {
-//        if (searchSongs == null) {
-//            contentResolver = pontentResolver;
-//            searchSongs = new SearchSongs();
-//        }
-//        return searchSongs;
-//    }
+
 
     public static void searchSongs(ContentResolver contentResolver) {
 

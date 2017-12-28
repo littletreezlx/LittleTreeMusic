@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="小树音乐"
         android:textSize="60sp"
-        android:textColor="@color/white"
+        android:textColor="@color/白色"
         android:layout_gravity="center"
         />
 

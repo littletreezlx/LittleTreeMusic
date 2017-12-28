@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
         android:background="@color/透明"
-        app:layout_heightPercent="15%">
+        app:layout_heightPercent="18%">
 
 
         <TextView
@@ -29,7 +29,7 @@
             android:gravity="center_horizontal"
             android:singleLine="true"
             android:marqueeRepeatLimit="marquee_forever"
-            android:textColor="@color/white"
+            android:textColor="@color/白色"
             android:textSize="30sp"
            />
 
@@ -38,11 +38,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/play_title"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             android:textSize="16sp"
-            android:textColor="@color/white"
+            android:textColor="@color/白色"
             android:text="歌手"
+            />
+
+        <TextView
+            android:id="@+id/play_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/play_artist"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:textColor="@color/白色"
+            android:text=""
             />
 
         <Button
@@ -80,8 +92,11 @@
                 android:id="@+id/play_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxHeight="5dp"
+                android:minHeight="5dp"
                 android:layout_centerVertical="true"
                 android:thumb="@drawable/seekbar_thumb"
+                android:progressDrawable="@drawable/seekbar_bar"
                 android:progress="0"
                 android:max="100"
                 android:layout_margin="3dp"
@@ -93,7 +108,7 @@
                 android:layout_alignLeft="@id/play_seekbar"
                 android:text="00:00"
                 android:textSize="10sp"
-                android:textColor="@color/white"/>
+                android:textColor="@color/白色"/>
 
             <TextView
                 android:id="@+id/final_time"
@@ -102,7 +117,7 @@
                 android:layout_alignRight="@id/play_seekbar"
                 android:text="3:59"
                 android:textSize="10sp"
-                android:textColor="@color/white"/>
+                android:textColor="@color/白色"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -111,26 +126,26 @@
             android:layout_height="0dp"
             android:layout_alignParentBottom="true"
             android:background="@color/透明"
-            app:layout_heightPercent="12%">
+            app:layout_heightPercent="10%">
 
             <Button
                 android:id="@+id/play_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/icon_search" />
 
             <Button
                 android:id="@+id/play_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/icon_play" />
 
             <Button
                 android:id="@+id/play_pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_centerHorizontal="true"
                 android:visibility="gone"
                 android:background="@drawable/icon_pause" />
@@ -139,22 +154,24 @@
 
             <Button
                 android:id="@+id/play_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/icon_menu" />
 
             <Button
                 android:id="@+id/play_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@id/play_mode"
                 android:background="@drawable/icon_next" />
 
             <Button
                 android:id="@+id/play_previous"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/play_tag"
                 android:background="@drawable/icon_previous" />
 
