@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import com.example.littletreemusic.R;
 import com.example.littletreemusic.activity.MainActivity;
 import com.example.littletreemusic.adapter.GridViewAdapter2;
-import com.example.littletreemusic.model.Song;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,6 @@ import java.util.Set;
 public class BodyFragment2 extends Fragment {
 
     RelativeLayout mbodytemp;
-    List<Song> songs;
     GridView gridView;
     GridViewAdapter2 adapter;
     List<String> tagList;
@@ -37,9 +35,7 @@ public class BodyFragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_tags_body, mbodytemp, true);
         mbodytemp = (RelativeLayout) view.findViewById(R.id.body_temp);
-
         gridView = (GridView) view.findViewById(R.id.fragment_tags_gridview);
-
         SharedPreferences sp_tag=getActivity().getSharedPreferences("sp_tag", Context.MODE_PRIVATE);
         tagList = new ArrayList<>();
         Set tagSet=sp_tag.getStringSet("TagSet",null);

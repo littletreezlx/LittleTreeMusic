@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.littletreemusic.R;
@@ -50,7 +49,7 @@ public class GridViewAdapter2 extends BaseAdapter{
         if (convertView==null){
             viewHolder=new GridViewAdapter2.ViewHolder();
             convertView=inflater.inflate(R.layout.fragment_tags_body_gridview_item,null);
-            viewHolder.frameLayout=(FrameLayout)convertView.findViewById(R.id.fragment_tags_gridview_bp);
+//            viewHolder.frameLayout=(FrameLayout)convertView.findViewById(R.id.fragment_tags_gridview_bp);
             viewHolder.textView=(TextView)convertView.findViewById(R.id.fragment_tags_gridview_tagname);
             convertView.setTag(viewHolder);
         }else {
@@ -76,7 +75,7 @@ public class GridViewAdapter2 extends BaseAdapter{
 
     class ViewHolder
     {
-        private FrameLayout frameLayout;
+//        private FrameLayout frameLayout;
         private TextView textView;
     }
 

@@ -6,13 +6,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.audiofx.Visualizer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +27,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -33,8 +38,8 @@ import com.example.littletreemusic.R;
 import com.example.littletreemusic.adapter.ListViewAdapter0;
 import com.example.littletreemusic.adapter.ViewPagerAdapter0;
 import com.example.littletreemusic.animate.DepthPageTransformer;
-import com.example.littletreemusic.service.MusicService;
 import com.example.littletreemusic.model.Song;
+import com.example.littletreemusic.service.MusicService;
 import com.example.littletreemusic.view.ViewPager_view0;
 
 import org.litepal.crud.DataSupport;
@@ -53,8 +58,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     SeekBar seekBar;
     MusicService musicService;
     int currentTimeInt,totalTimeInt,currentProgress;
-    String playingTitle,playingArtist,a,b,c,d,aa,bb;
-    ViewPager viewPager;
+    String playingTitle,playingArtist,a,b,c,d,aa,bb,bpIdstr,bpPathstr;;
     Handler handler;
     Bundle bundle0,bundle1;
     ServiceConnection serviceConnection;
@@ -62,6 +66,13 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
     Set<String> tagSet;
     ListViewAdapter0 adapter;
     List<String> playingTags,tagList,checkedTags;
+    LayoutInflater inflater;
+    View view0,view1;
+    ViewPager_view0 viewPager_view0;
+    ViewPager viewPager;
+    ImageView imageView;
+    Drawable bp;
+    byte[] mBytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +123,38 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
+
+//                mVisualizer = new Visualizer(musicService.getMediaPlayer().getAudioSessionId());
+//                mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[0]);
+//                mVisualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
+//
+//                    //这个回调采集的是波形数据
+//                    @Override
+//                    public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform,
+//                                                      int samplingRate) {
+////                        mBytes=waveform;
+//                        viewPager_view0.updateVisualizer(waveform);
+//                    }
+//
+//                    @Override
+//                    public void onFftDataCapture(Visualizer visualizer, byte[] fft,
+//                                                 int samplingRate) {
+////                        Toast.makeText(PlayActivity.this,"2",Toast.LENGTH_SHORT).show();
+////                        byte[] model = new byte[fft.length / 2 + 1];
+////                        model[0] = (byte) Math.abs(fft[1]);
+////                        int j = 1;
+////
+////                        for (int i = 2; i < 18;) {
+////                            model[j] = (byte) Math.hypot(fft[i], fft[i + 1]);
+////                            i += 2;
+////                            j++;
+////                        }
+////
+////                        viewPager_view0.updateVisualizer(model);
+//                    }
+//                }, Visualizer.getMaxCaptureRate() / 2, true, false);
+//
+//                mVisualizer.setEnabled(true);
             }
             @Override
             public void onServiceDisconnected(ComponentName name) {
@@ -135,6 +178,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                         bundle0.putString("a", a);
                         bundle0.putString("b", b);
                         bundle0.putInt("currentInt",currentTimeInt);
+                        message.what=0x111;
                         message.setData(bundle0);
                         handler.sendMessage(message);
                         Thread.sleep(1000);
@@ -146,46 +190,22 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
 
 //       初始化ViewPager
-        View view0 = View.inflate(this,R.layout.fragment_play_viewpager0, null);
-        View view1 = View.inflate(this,R.layout.fragment_play_viewpager1, null);
-        List<View> viewList = new ArrayList<View>();
+
+
+//
+//        inflater=getLayoutInflater();
+//        view0 = inflater.inflate(R.layout.fragment_play_viewpager0,viewPager,true);
+//        view1 = inflater.inflate(R.layout.fragment_play_viewpager1,viewPager,true);
+
+        view0 = View.inflate(this,R.layout.fragment_play_viewpager0, null);
+        view1 = View.inflate(this,R.layout.fragment_play_viewpager1, null);
+        List<View> viewList = new ArrayList<>();
         viewList.add(view0);
         viewList.add(view1);
         viewPager.setAdapter(new ViewPagerAdapter0(viewList));
         viewPager.setPageTransformer(true, new DepthPageTransformer());
-
-//        获取音频频谱
-        if (musicService != null){
-            mVisualizer = new Visualizer(musicService.getMediaPlayer().getAudioSessionId());
-            mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
-            mVisualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
-
-                //这个回调采集的是波形数据
-                @Override
-                public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform,
-                                                  int samplingRate) {
-                }
-
-                @Override
-                public void onFftDataCapture(Visualizer visualizer, byte[] fft,
-                                             int samplingRate) {
-                    byte[] model = new byte[fft.length / 2 + 1];
-                    model[0] = (byte) Math.abs(fft[1]);
-                    int j = 1;
-
-                    for (int i = 2; i < 18;) {
-                        model[j] = (byte) Math.hypot(fft[i], fft[i + 1]);
-                        i += 2;
-                        j++;
-                    }
-                    ViewPager_view0 view0 =(ViewPager_view0) View.inflate(PlayActivity.this,R.layout.fragment_play_viewpager1, null);
-                    view0.updateVisualizer(model);
-                }
-            }, Visualizer.getMaxCaptureRate() / 2, true, false);
-
-            mVisualizer.setEnabled(true);
-        }
-
+//        viewPager_view0=(ViewPager_view0) view0.findViewById(R.id.view0);
+//        viewPager_view0.setWillNotDraw(false);
 
 //        seekBar
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -212,19 +232,51 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-          handler = new SeekBarHandler();
+          handler = new PlayHandler();
+
+//          new Thread(new R1()).start();
 
     }
 
-    class SeekBarHandler extends android.os.Handler{
+//    class R1 implements Runnable {
+//
+//        @Override
+//        public void run() {
+//            do{
+//                try{
+//                    handler.sendEmptyMessage(0x222);
+//                    Thread.sleep(1000);
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }while(true);
+//        }
+//    }
+
+
+
+
+
+    class PlayHandler extends android.os.Handler{
         @Override
         public void handleMessage(Message msg) {
-            bundle1=msg.getData();
-            aa=bundle1.getString("a","0");
-            bb=bundle1.getString("b","0");
-            currentProgress=bundle1.getInt("currentInt",0);
-            seekBar.setProgress(currentProgress);
-            text2.setText(aa + ":" + bb);
+            switch (msg.what){
+                case 0x111:
+                    bundle1=msg.getData();
+                    aa=bundle1.getString("a","0");
+                    bb=bundle1.getString("b","0");
+                    currentProgress=bundle1.getInt("currentInt",0);
+                    seekBar.setProgress(currentProgress);
+                    text2.setText(aa + ":" + bb);
+                    break;
+
+//                case 0x222:
+//                    viewPager_view0.updateVisualizer(mBytes);
+//                    break;
+
+                    default:break;
+
+            }
         }
     }
 
@@ -300,6 +352,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         tagbtn = (Button) findViewById(R.id.play_tag);
         modebtn = (Button) findViewById(R.id.play_mode);
         viewPager = (ViewPager) findViewById(R.id.play_viewpager);
+        imageView = (ImageView) findViewById(R.id.background_picture_play);
 
         backbtn.setOnClickListener(this);
         playbtn.setOnClickListener(this);
@@ -308,6 +361,30 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         previousbtn.setOnClickListener(this);
         tagbtn.setOnClickListener(this);
         modebtn.setOnClickListener(this);
+
+        SharedPreferences sp=getSharedPreferences("sp0",MODE_PRIVATE);
+        bpIdstr=sp.getString("bp_default","no_bpId");
+        if (! bpIdstr.equals("no_bpId")){
+            int bpId = getResources().getIdentifier(bpIdstr, "drawable", "com.example.littletreemusic");
+            bp = ContextCompat.getDrawable(this,bpId);
+            imageView.setImageDrawable(bp);
+        }else if (bpIdstr.equals("no_bpId")){
+            bpPathstr=sp.getString("bp_album","no_bpal");
+            if (bpPathstr !="no_bpal"){
+                Bitmap bitmap = BitmapFactory.decodeFile(bpPathstr);
+                if (bitmap != null){
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+        if (bpIdstr.equals("no_bpId") && bpPathstr.equals("no_bpal")){
+            bp = ContextCompat.getDrawable(this, R.drawable.bp_0);
+            imageView.setImageDrawable(bp);
+        }
+
+//        inflater = getLayoutInflater();
+//        View page0 = inflater.inflate(R.layout.fragment_play_viewpager1, null);
+//        view0=(ViewPager_view0) page0.findViewById(R.id.view0);
     }
 
 //    private void initBroadCast(){
@@ -351,6 +428,25 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    public void updataTagText() {
+        String uristr = MusicService.playinguristr;
+        if (uristr == null) {
+            SharedPreferences sp0 = getSharedPreferences("sp0", Context.MODE_PRIVATE);
+            uristr = sp0.getString("playing_uri", "no_uri");
+        }
+        if (!uristr.equals("no_uri")) {
+            List<Song> list0 = DataSupport.where("uri=?", uristr).find(Song.class);
+            if (list0 != null && list0.size() != 0) {
+                playingTags = list0.get(0).getTagList();
+                text4.setText("");
+                for (String t : playingTags) {
+                    text4.append("  " + t);
+                }
+            }
+        }
+    }
+
 
 
 
@@ -417,17 +513,20 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                     SharedPreferences sp_tag=getSharedPreferences("sp_tag",MODE_PRIVATE);
                     tagSet=sp_tag.getStringSet("TagSet",null);
                     Set<String> tagSet2=new HashSet<>();
-                    tagSet2.addAll(tagSet);
+                    if (tagSet != null){
+                        tagSet2.addAll(tagSet);
+                    }
                     tagSet2.add(name);
                     SharedPreferences.Editor editor=getSharedPreferences("sp_tag",MODE_PRIVATE).edit();
                     editor.remove("TagSet");
                     editor.putStringSet("TagSet",tagSet2);
                     editor.apply();
-
                         tagList.clear();
                         tagList.addAll(tagSet2);
-
                     adapter.notifyDataSetChanged();
+
+
+
 //                    updateTagList();
                 }
             }
@@ -457,6 +556,9 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
                 Song updateSong = new Song();
                 updateSong.setTagList(ListViewAdapter0.adcheckedTags);
                 updateSong.update(updateId);
+
+                updataTagText();
+
             }
         });
         builder3.setNegativeButton("取消", new DialogInterface.OnClickListener() {

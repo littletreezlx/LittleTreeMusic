@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 /**
@@ -45,11 +44,13 @@ public class ViewPager_view0 extends View {
     public ViewPager_view0(Context context){
         super(context);
         init();
+//        setWillNotDraw(false);
     }
 
     public ViewPager_view0(Context context,AttributeSet attrs){
         super(context, attrs);
         init();
+//        setWillNotDraw(false);
     }
 
     private void init() {
@@ -58,6 +59,8 @@ public class ViewPager_view0 extends View {
         mPaint.setColor(Color.BLUE);
         mPaint.setStrokeWidth(5f);
         mPaint.setStyle(Paint.Style.FILL);
+
+        setBackgroundColor(Color.parseColor("#ffffff"));
 
     }
 
@@ -70,30 +73,28 @@ public class ViewPager_view0 extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        DisplayMetrics dm =getResources().getDisplayMetrics();
-        int screen_w = dm.widthPixels;
-        int screen_h = dm.heightPixels;
-
+//        DisplayMetrics dm =getResources().getDisplayMetrics();
+//        int screen_w = dm.widthPixels;
+//        int screen_h = dm.heightPixels;
+        setBackgroundColor(Color.parseColor("#ffffff"));
         if (mBytes != null){
-            if (mPoints == null || mPoints.length < mBytes.length * 4) {
-                mPoints = new float[mBytes.length * 4];
+            if (mPoints == null) {
+                mPoints = new float[mBytes.length];
             }
 
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < 32; i++) {
                 if (mBytes[i] < 0) {
                     mBytes[i] = 127;
                 }
-                mPoints[i * 4] = mRect.width() * i / 9;
+                mPoints[i * 4] = mRect.width() * i / 32;
                 mPoints[i * 4 + 1] = mRect.height() / 2;
-                mPoints[i * 4 + 2] = mRect.width() * i / 9;
+                mPoints[i * 4 + 2] = mRect.width() * i / 32;
                 mPoints[i * 4 + 3] = 2 + mRect.height() / 2 + mBytes[i];
             }
             canvas.drawLines(mPoints, mPaint);
         }
-
-//        postInvalidateDelayed(100);
+        postInvalidateDelayed(100);
     }
-
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -101,7 +102,7 @@ public class ViewPager_view0 extends View {
         mViewWidth = getMeasuredWidth();
         mRectHeight = getMeasuredHeight();
 //        mRectWidth = (int) (mViewWidth * 0.6 / mRectCount);
-        mRectWidth=( mViewWidth-9*mOffset)/10;
+        mRectWidth=(mViewWidth-9*mOffset)/10;
         mLinearGradient = new LinearGradient(0, 0, mRectWidth, mRectHeight,
                 mTopColor, mBottomColor, Shader.TileMode.CLAMP);
         //给画笔设置Shader

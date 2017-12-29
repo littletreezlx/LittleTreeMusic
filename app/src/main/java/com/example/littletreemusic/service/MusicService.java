@@ -144,7 +144,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (position != playingId){
             try {
                 mediaPlayer.stop();
-                mediaPlayer.release();
+//                mediaPlayer.release();
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(getApplicationContext(),uri);
                 mediaPlayer.prepare();
@@ -209,14 +209,30 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void toNextSong(int nop){
         switch (nop){
             case 0:
-                playingId--;
+                if (playingId >1){
+                    playingId--;
+                }
                 break;
             case 1:
-                playingId++;
+                if (songs != null){
+                   if ( playingId < songs.size()-1){
+                        playingId++;
+                    }else{
+                        playingId = 0;
+                    }
+                }else{
+                    if (playingId < DataSupport.findLast(Song.class).getId()){
+                        playingId++;
+                    }else{
+                        playingId = 0;
+                    }
+                }
                 break;
+
             default:
                 break;
         }
+
         if (songs == null){
             nextSong=DataSupport.limit(1).offset(playingId).find(Song.class).get(0);
         }else {
@@ -230,7 +246,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             urinextstr=nextSong.getUri();
             urinext = Uri.parse(urinextstr);
             mediaPlayer.stop();
-            mediaPlayer.release();
+//            mediaPlayer.release();
+
             try {
                 mediaPlayer=new MediaPlayer();
                 mediaPlayer.setDataSource(getApplicationContext(),urinext);
@@ -243,12 +260,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             }
         }else {
             mediaPlayer.stop();
-            mediaPlayer.release();
+//            mediaPlayer.release();
         }
 
     }
 
     public void start(){
+
             mediaPlayer.start();
             isPlaying=true;
             isPaused=false;
@@ -270,6 +288,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         SharedPreferences.Editor editor=getSharedPreferences("sp0",MODE_PRIVATE).edit();
         editor.putString("playing_uri", playinguristr);
         editor.apply();
+
     }
 
     @Override
@@ -294,7 +313,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     if (mediaPlayer != null && mediaPlayer.isPlaying()) {
         mediaPlayer.stop();
-        mediaPlayer.release();
+//        mediaPlayer.release();
         mediaPlayer = null;
     }
     stopForeground(true);
@@ -333,6 +352,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void setSongList(List<Song> songList){
+
         songs=songList;
     }
 

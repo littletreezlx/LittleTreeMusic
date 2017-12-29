@@ -45,8 +45,8 @@ import com.example.littletreemusic.util.SearchSongs;
 
 public class MainActivity extends FragmentActivity {
 
-    private ImageView imageView;
-    private Drawable bp;
+    ImageView imageView;
+    Drawable bp;
     ContentResolver contentResolver;
     String bpIdstr, bpPathstr;
     Fragment title0,title1,title2,body0,body1,body2,bottom0;
@@ -254,11 +254,12 @@ public class MainActivity extends FragmentActivity {
 
     public void toOneTag(int mode){
         title2=new TitleFragment1();
-        body2=new BodyFragment2();
+        body2=new BodyFragment1();
         Bundle bundle=new Bundle();
-        bundle.putInt("mode",mode+10);
+        bundle.putInt("mode",mode);
 //        body2.setArguments(bundle);
         title2.setArguments(bundle);
+        body2.setArguments(bundle);
         fm.beginTransaction().add(R.id.title_temp,title2).add(R.id.body_temp,body2)
                 .hide(title1).hide(body1).commit();
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

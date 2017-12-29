@@ -224,14 +224,15 @@ public class BottomFragment0 extends Fragment implements View.OnClickListener{
     public void onResume(){
         super.onResume();
 
-//        updateTAB();
+        updateTAB();
         bindMusicService();
-        Toast.makeText(getActivity(),"asdasdadasd",Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(),"asdasdadasd",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
+        Toast.makeText(getActivity(),"asdasdadasd",Toast.LENGTH_LONG).show();
 //        getActivity().unregisterReceiver(receiver);
 //        getActivity().unbindService(serviceConnection);
     }

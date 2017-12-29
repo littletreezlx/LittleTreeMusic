@@ -28,7 +28,11 @@ public class ViewPagerAdapter0 extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        container.addView(views.get(position));
+
+        if (views.get(position) != null){
+            container.addView(views.get(position));
+        }
+
         //每次滑动的时候把视图添加到viewpager
         return views.get(position);
     }

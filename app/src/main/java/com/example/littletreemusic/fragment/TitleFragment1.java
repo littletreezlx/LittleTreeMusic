@@ -17,6 +17,7 @@ import com.example.littletreemusic.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ZLX Vincent on 2017/8/30.
@@ -53,8 +54,12 @@ public class TitleFragment1 extends Fragment {
             default:
                 SharedPreferences sp_tag=getActivity().getSharedPreferences("sp_tag", Context.MODE_PRIVATE);
                 List<String> tagList = new ArrayList<>();
-                tagList.addAll(sp_tag.getStringSet("TagSet",null));
-                String tagName = tagList.get(mode-10);
+                Set tagSet =sp_tag.getStringSet("TagSet",null);
+                if (tagSet != null){
+                    tagList.addAll(tagSet);
+                }
+                int md2=mode-10;
+                String tagName = tagList.get(md2);
                 titleText.setText(tagName);
                 break;
         }

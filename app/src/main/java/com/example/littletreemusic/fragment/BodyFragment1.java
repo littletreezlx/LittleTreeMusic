@@ -59,6 +59,7 @@ public class BodyFragment1 extends Fragment {
     EditText editText;
     CharacterParser characterParser;
     PinyinComparator pinyinComparator;
+    boolean haveSetSongList;
 
 
 
@@ -88,13 +89,15 @@ public class BodyFragment1 extends Fragment {
                 break;
             case 1:
                 songs=DataSupport.where("isFavourite = ?","1").find(Song.class);
+                break;
             default:
                 SharedPreferences sp_tag=getActivity().getSharedPreferences("sp_tag", Context.MODE_PRIVATE);
                 List<String> tagList = new ArrayList<>();
                 Set tagSet=sp_tag.getStringSet("TagSet",null);
                 if (tagSet != null){
                     tagList.addAll(tagSet);
-                    String tagName = tagList.get(mode-10);
+                    int md2=mode-10;
+                    String tagName = tagList.get(md2);
                     songs_all = DataSupport.findAll(Song.class);
                     songs=new ArrayList<>();
                     for (int i=0;i<songs_all.size();i++){
@@ -145,7 +148,13 @@ public class BodyFragment1 extends Fragment {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 MusicService musicService=((MusicService.MusicBinder)service).getService();
-                musicService.setSongList(songs);
+
+                if (!haveSetSongList){
+                    musicService.setSongList(songs);
+                    haveSetSongList=true;
+                }
+
+
             }
 
             @Override
