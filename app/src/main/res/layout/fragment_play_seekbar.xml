@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/透明" >
+
+    <TextView
+        android:id="@+id/current_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:text="00:00"
+        android:textSize="12sp"
+        android:textColor="@color/白色"/>
+
+    <TextView
+        android:id="@+id/total_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:text="00:00"
+        android:textSize="12sp"
+        android:textColor="@color/白色"/>
+
+    <SeekBar
+        android:id="@+id/play_seekbar_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/current_time"
+        android:layout_toStartOf="@+id/total_time"
+        android:maxHeight="4dp"
+        android:minHeight="4dp"
+        android:layout_centerVertical="true"
+        android:thumb="@drawable/seekbar_thumb"
+        android:progressDrawable="@drawable/seekbar_bar"
+        android:progress="0"
+        android:max="100"
+        android:layout_margin="3dp"
+        />
+</RelativeLayout>

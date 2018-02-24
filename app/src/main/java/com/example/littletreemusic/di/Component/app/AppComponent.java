@@ -1,0 +1,50 @@
+package com.example.littletreemusic.di.Component.app;
+
+import android.app.Application;
+import android.content.SharedPreferences;
+
+import com.example.littletreemusic.application.MyApplication;
+import com.example.littletreemusic.di.scopes.PerApp;
+import com.example.littletreemusic.presenter.PicturePresenter;
+import com.example.littletreemusic.service.MusicService;
+import com.example.littletreemusic.service.MusicServicePresenter;
+import com.google.gson.Gson;
+
+import dagger.Component;
+import retrofit2.Retrofit;
+
+/**
+ * Created by niuxiaowei on 16/3/19.
+ */
+
+@PerApp
+@Component(modules={AppModule.class, MusicServiceModule.class,NetWorkModule.class})
+public interface AppComponent {
+
+    void inject(MyApplication myApplication);
+
+    void inject(MusicService musicService);
+
+    void inject(MusicServicePresenter musicServicePresenter);
+
+
+
+    Application getApplication();
+
+    SharedPreferences getSharedPreferences();
+    Gson getGson();
+    Retrofit getRetrofit();
+    PicturePresenter getPicturePresenter();
+
+    MusicService getMusicService();
+
+//    MainActivityComponent newMainActivityComponent();
+//
+//    ChangeBPActivityComponent newActivityComponent();
+//
+//    PlayActivityComponent newPlayComponent();
+//
+//    LoginActivityComponent newLoginComponent();
+
+
+}

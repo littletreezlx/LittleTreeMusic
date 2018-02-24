@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.littletreemusic.R;
+import com.example.littletreemusic.activity.main.MainActivity;
 
 
 /**

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_main_bottom"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/透明"
+    android:layout_alignParentBottom="true"
+    >
+
+    <ImageButton
+        android:id="@+id/play_bottom_tag"
+        style="@style/SquareImageButton_Style"
+        app:layout_heightPercent="20%w"
+        app:layout_widthPercent="20%w"
+        android:src="@drawable/ic_grade_white_24dp" />
+
+    <ImageButton
+        android:id="@+id/play_bottom_previous"
+        style="@style/SquareImageButton_Style"
+        app:layout_heightPercent="20%w"
+        app:layout_widthPercent="20%w"
+        android:src="@drawable/ic_skip_previous_white_24dp"
+        />
+
+    <ImageButton
+        android:id="@+id/play_bottom_pause"
+        style="@style/SquareImageButton_Style"
+        app:layout_heightPercent="20%w"
+        app:layout_widthPercent="20%w"
+        android:src="@drawable/ic_pause_white_24dp"
+        android:visibility="gone"
+      />
+
+    <ImageButton
+        android:id="@+id/play_bottom_play"
+        style="@style/SquareImageButton_Style"
+        app:layout_heightPercent="20%w"
+        app:layout_widthPercent="20%w"
+        android:src="@drawable/ic_play_arrow_white_24dp"
+        />
+
+    <ImageButton
+        android:id="@+id/play_bottom_next"
+        style="@style/SquareImageButton_Style"
+        app:layout_heightPercent="20%w"
+        app:layout_widthPercent="20%w"
+        android:src="@drawable/ic_skip_next_white_24dp"
+       />
+
+
+    <ImageButton
+        android:id="@+id/play_bottom_mode"
+        style="@style/SquareImageButton_Style"
+        app:layout_heightPercent="20%w"
+        app:layout_widthPercent="20%w"
+        android:src="@drawable/ic_menu_white_24dp"
+        />
+
+
+</com.zhy.android.percent.support.PercentLinearLayout>
+
+

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notification_layout"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#3f000000"
+    android:layout_centerInParent="true"
+    android:orientation="horizontal"
+    >
+
+    <ImageButton
+        android:id="@+id/notification_btn_album"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:padding="5dp"
+        android:background="@drawable/selector_btnsrc_press"
+        android:src="@drawable/ic_music_note_white_24dp"
+        />
+
+
+
+    <LinearLayout
+        android:id="@+id/notification_textlayout"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/notification_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="title"
+            android:textSize="19sp"
+            android:textColor="#ffffff"
+            android:ellipsize="end"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:id="@+id/notification_tv_artist"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:maxLines="1"
+            android:text="artist"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+    <ImageButton
+        android:id="@+id/notification_btn_previous"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:padding="5dp"
+        android:background="@drawable/selector_btnsrc_press"
+        android:src="@drawable/ic_skip_previous_white_24dp" />
+
+
+    <ImageButton
+        android:id="@+id/notification_btn_play"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        android:padding="5dp"
+        android:background="@drawable/selector_btnsrc_press"
+        android:src="@drawable/ic_play_arrow_white_24dp" />
+
+    <ImageButton
+        android:id="@+id/notification_btn_pause"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:visibility="visible"
+        android:scaleType="fitCenter"
+        android:padding="5dp"
+        android:background="@drawable/selector_btnsrc_press"
+        android:src="@drawable/ic_pause_white_24dp" />
+
+    <ImageButton
+        android:id="@+id/notification_btn_next"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:padding="5dp"
+        android:background="@drawable/selector_btnsrc_press"
+        android:src="@drawable/ic_skip_next_white_24dp"
+        />
+
+
+</LinearLayout>

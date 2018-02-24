@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_below="@+id/fragment_main_title">
+   >
 
     
     <GridView
@@ -16,7 +16,9 @@
         android:verticalSpacing="20dp"
         android:stretchMode="columnWidth"
         android:gravity="center"
-        android:layout_margin="5dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         >
     </GridView>
 

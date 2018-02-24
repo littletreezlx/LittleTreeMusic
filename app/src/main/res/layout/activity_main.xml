@@ -6,54 +6,34 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     >
 
-<FrameLayout
-    android:id="@+id/uselesslayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-   >
-
-    <ImageView
-        android:id="@+id/background_picture_main"
+    <com.zhy.android.percent.support.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
-
-    <android.support.percent.PercentRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         >
 
         <RelativeLayout
-            android:id="@+id/title_temp"
+            android:id="@+id/main_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_alignParentTop="true"
-            app:layout_heightPercent="10%"
+            app:layout_heightPercent="15%h"
+            android:background="@color/透明"
+            android:fitsSystemWindows="true"
             >
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/space0"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_below="@id/title_temp"
-            />
-
-
         <RelativeLayout
-            android:id="@+id/body_temp"
+            android:id="@+id/main_body"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/space0"
+            android:layout_below="@id/main_title"
             android:layout_above="@+id/bottom_temp"
-            app:layout_heightPercent="50%"
+            app:layout_heightPercent="70%h"
+            app:layout_marginTopPercent="1%h"
+            app:layout_marginBottomPercent="1%h"
             android:focusable="true"
             android:clickable="true"
             >
@@ -62,22 +42,21 @@
 
         <RelativeLayout
 
-            android:id="@+id/bottom_temp"
+            android:id="@+id/main_bottom"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_alignParentBottom="true"
-            app:layout_heightPercent="10%"
+            app:layout_heightPercent="10%h"
             >
 
         </RelativeLayout>
 
-    </android.support.percent.PercentRelativeLayout>
-</FrameLayout>
+    </com.zhy.android.percent.support.PercentRelativeLayout>
 
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="150dp"
+        android:id="@+id/main_naviationview"
+        android:layout_width="160dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:background="@color/白色"
