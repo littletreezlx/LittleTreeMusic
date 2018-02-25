@@ -56,7 +56,7 @@ public class GridViewAdapter1 extends BaseAdapter {
         final ViewHolder viewHolder;
         if (convertView==null){
             viewHolder=new ViewHolder();
-            convertView=inflater.inflate(R.layout.activity_changebp_gridview_item,null);
+            convertView=inflater.inflate(R.layout.nav_changebp_item,null);
             viewHolder.image0=(ImageView)convertView.findViewById(R.id.changebp_gridview_image);
             convertView.setTag(viewHolder);
         }else {

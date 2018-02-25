@@ -29,27 +29,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener,AudioManager.OnAudioFocusChangeListener{
+
+
+    @Inject
+    MusicServicePresenter musicServicePresenter;
 
     private MusicBinder musicBinder=new MusicBinder();
     private MediaPlayer mediaPlayer;
     public static String playingUriStr;
     public static boolean isPlaying;
-    private String uriNextStr,playMode;
+    private String uriNextStr;
     private int playingPosition=0,currentTime,totalTime,lastSongList;
     boolean isPaused=false,isFirst=true;
     private Uri uri;
+    String uriStr;
+    Song playingSong;
 
     NotificationManager notifyManager;
     Notification notification;
     List<Song> songs,songs_all;
     Song nextSong;
     RemoteViews remoteViews;
+    SharedPreferences sp;
+    int playMode=0;
+    final int PLAYMODE_SEQUENCE=0,PLAYMODE_SINGE=1,PLAYMODE_RANDOM=2;
 
     @Override
     public void onCreate(){
         super.onCreate();
+        sp=getSharedPreferences("sp",MODE_PRIVATE);
+//        musicServicePresenter=new MusicServicePresenter();
         isPlaying=false;
         isPaused=false;
         isFirst=true;
@@ -58,62 +71,28 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 //        mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
 //        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnPreparedListener(this);
-        playMode="bySequence";
-        SharedPreferences sp=getSharedPreferences("sp",MODE_PRIVATE);
-//      寻找上次播放的歌单
-//        待处理
-        lastSongList=sp.getInt("LastSongList",0);
-        switch (lastSongList){
-            case 0:
-                songs = DataSupport.findAll(Song.class);
-                break;
-            case 1:
-                songs=DataSupport.where("isFavourite = ?","1").find(Song.class);
-                break;
-                
-            default:
-                SharedPreferences sp_tag=getSharedPreferences("sp_tag", Context.MODE_PRIVATE);
-                List<String> tagList = new ArrayList<>();
-                Set tagSet=sp_tag.getStringSet("TagSet",null);
-                if (tagSet != null){
-                    tagList.addAll(tagSet);
-                    int lsl=lastSongList-10;
-                    String tagName = tagList.get(lsl);
-                    songs_all = DataSupport.findAll(Song.class);
-                    songs=new ArrayList<>();
-                    for (int i=0;i<songs_all.size();i++){
-                        if (songs_all.get(i).getTagList().contains(tagName)) {
-                            songs.add(songs_all.get(i));
-                        }
-                    }
-                }
-                break;
-        }
-//      寻找上次播放的歌曲Uri及Position并加载Uri准备。
-        playingUriStr=sp.getString("playing_Uri","noUri");
-        playingPosition=sp.getInt("playing_Position",0);
-        if (!playingUriStr.equals("noUri")){
-            try {
-                uri=Uri.parse(playingUriStr);
-                if (uri != null){
-                    mediaPlayer.setDataSource(getApplicationContext(),uri);
-                }
-                mediaPlayer.prepare();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        默认顺序
+        playMode=PLAYMODE_SEQUENCE;
+//        寻找上次的播放歌单和歌曲，并准备
+        initLastSongListAndSong();
 //        播放结束后调用toNext
-        if (mediaPlayer != null){
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    if(playMode.equals("bySequence")){
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+
+                switch (playMode){
+                    case PLAYMODE_SEQUENCE:
                         toNextSong(1);
-                    }
+                        break;
+                    case PLAYMODE_SINGE:
+                        break;
+                    case PLAYMODE_RANDOM:
+                        break;
+                    default:break;
                 }
-            });
-        }
+            }
+        });
+
 //        添加通知栏
         addNotification();
     }
@@ -165,15 +144,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 toNextSong(1);
                 break;
 
-
             default:
                 break;
 
         }
-
         return  START_STICKY;
     }
-
 
     public void toNextSong(int toNext){
         switch (toNext){
@@ -189,12 +165,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     }else{
                         playingPosition = 0;
                     }
-                }else{
-                    if (playingPosition < DataSupport.findLast(Song.class).getId()){
-                        playingPosition++;
-                    }else{
-                        playingPosition = 0;
-                    }
                 }
                 break;
 
@@ -202,16 +172,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 break;
         }
 
-        if (songs == null){
-            nextSong=DataSupport.find(Song.class,playingPosition);
-        }else {
-            if (playingPosition <songs.size()){
-                nextSong=songs.get(playingPosition);
-            }else {
-                nextSong=null;
-            }
-        }
-        if (nextSong != null){
+        if (playingPosition<songs.size()){
+            nextSong=songs.get(playingPosition);
             uriNextStr=nextSong.getUri();
             Uri urinext = Uri.parse(uriNextStr);
             mediaPlayer.stop();
@@ -226,8 +188,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else {
-            mediaPlayer.stop();
         }
     }
 
@@ -390,6 +350,49 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (notifyManager != null){
             notifyManager.notify(1,notification);
         }
+    }
+
+    private void initLastSongListAndSong(){
+        songs = new ArrayList<>();
+        int lastSongList=sp.getInt("LastSongList",0);
+        switch (lastSongList){
+            case -2:
+                songs = DataSupport.findAll(Song.class);
+                break;
+            case -1:
+                songs=DataSupport.where("isFavourite = ?","1").find(Song.class);
+                break;
+            default:
+                Set tagSet=sp.getStringSet("TagSet",null);
+                if (tagSet != null){
+                    List<String> tagList = new ArrayList<>();
+                    tagList.addAll(tagSet);
+                    String tagName = tagList.get(lastSongList);
+                    List<Song> songs_all = DataSupport.findAll(Song.class);
+                    songs=new ArrayList<>();
+                    for (int i=0;i<songs_all.size();i++){
+                        if (songs_all.get(i).getTagList().contains(tagName)) {
+                            songs.add(songs_all.get(i));
+                        }
+                    }
+                }
+                break;
+        }
+        playingPosition=sp.getInt("playing_Position",0);
+        if (playingPosition < songs.size()){
+            playingSong=songs.get(playingPosition);
+            uriStr=playingSong.getUri();
+            uri=Uri.parse(uriStr);
+            try {
+                mediaPlayer.setDataSource(getApplicationContext(),uri);
+                mediaPlayer.prepare();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+//            songs为null，不做准备。
+        }
+
     }
 
 

@@ -65,7 +65,7 @@ public class SongListRecyclerViewAdapter extends RecyclerView.Adapter<SongListRe
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_main_songlist_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_songlist_item, parent, false);
         final ViewHolder holder = new ViewHolder(view);
 //        final int position=holder.getLayoutPosition();
 
@@ -170,18 +170,18 @@ public class SongListRecyclerViewAdapter extends RecyclerView.Adapter<SongListRe
         return null;
     }
 
-    public void showPlayingSong(int position) {
-        playingPosition = position;
-        notifyItemChanged(position);
-    }
+//    public void showPlayingSong(int position) {
+//        playingPosition = position;
+//        notifyItemChanged(position);
+//    }
 
-    public void updateItem(int position ){
-        if (lastSelectedPosition != -1){
-
-            notifyItemChanged(lastSelectedPosition);
-        }
-        notifyItemChanged(position);
-        lastSelectedPosition=position;
-    }
+//    public void updateItem(int position ){
+//        if (lastSelectedPosition != -1){
+//
+//            notifyItemChanged(lastSelectedPosition);
+//        }
+//        notifyItemChanged(position);
+//        lastSelectedPosition=position;
+//    }
 
 }

@@ -5,8 +5,6 @@ package com.example.littletreemusic.service;
  */
 
 public class MusicServicePresenter {
-
-
 }
 
 

@@ -61,7 +61,7 @@ public class SeekBarFragment extends Fragment implements SeekBarContract.ISeekBa
                 .build();
         seekBarComponent.inject(this);
         seekBarComponent.inject(seekBarPresenter);
-        View view = inflater.inflate(R.layout.fragment_play_seekbar, seekBarTemp, true);
+        View view = inflater.inflate(R.layout.play_seekbar, seekBarTemp, true);
         seekBarTemp = (RelativeLayout) view.findViewById(R.id.play_seekbar);
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);

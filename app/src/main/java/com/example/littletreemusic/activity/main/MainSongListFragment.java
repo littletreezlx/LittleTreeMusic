@@ -73,7 +73,7 @@ public class MainSongListFragment extends Fragment implements SongListContract.I
                 .build();
         mainSongListComponent.inject(this);
         mainSongListComponent.inject(songListPresenter);
-        View view = inflater.inflate(R.layout.fragment_main_songlist, mbodytemp, true);
+        View view = inflater.inflate(R.layout.main_songlist, mbodytemp, true);
         mbodytemp = (RelativeLayout) view.findViewById(R.id.main_body);
         unbinder = ButterKnife.bind(this, view);
 

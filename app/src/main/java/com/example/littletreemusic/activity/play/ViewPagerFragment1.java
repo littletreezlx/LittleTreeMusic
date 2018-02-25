@@ -41,7 +41,7 @@ public class ViewPagerFragment1 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
-        View view = inflater.inflate(R.layout.fragment_play_viewpager1, container, false);
+        View view = inflater.inflate(R.layout.play_viewpager1, container, false);
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         updateAlbum();

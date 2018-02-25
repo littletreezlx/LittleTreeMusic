@@ -31,6 +31,7 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+
     <style name="NavigationView_Style">
         <item name="android:textColor">@color/黑色</item>
         <item name="android:divider">@drawable/divider</item>
@@ -38,24 +39,37 @@
     </style>
 
 
-    正方形按钮
+    <!--Navigation中Fragment通用的TitleTextView-->
+    <style name="NavigationTitleTextView_Style">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/黑色</item>
+        <item name="android:background">@drawable/shape_rounded_navtitle</item>
+    </style>
+
+    <!--正方形按钮-->
     <style name="SquareImageButton_Style">
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:padding">10dp</item>
-        <item name="android:background">@drawable/selector_btnsrc_press</item>
+        <item name="android:background">@drawable/selector_btn_pressed</item>
     </style>
 
 
     <!--登录界面统一textview和edittext-->
     <style name="LoginTextView_Style">
-        <item name="android:layout_height">50dp</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:textColor">@color/黑色</item>
         <item name="android:textSize">30sp</item>
         <item name="android:layout_margin">10dp</item>
         <item name="android:gravity">center</item>
+
     </style>
 
     <style name="LoginEditText_Style">
@@ -63,8 +77,7 @@
         <item name="android:layout_width">200dp</item>
         <item name="android:textColor">@color/黑色</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:background">@drawable/shape_rounded</item>
-
+        <item name="android:background">@drawable/shape_edittext_login</item>
         <!--<item name="android:layout_margin">10dp</item>-->
         <!--<item name="android:gravity">center</item>-->
     </style>

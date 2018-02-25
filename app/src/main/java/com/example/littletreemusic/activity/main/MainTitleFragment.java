@@ -54,7 +54,7 @@ public class MainTitleFragment extends Fragment implements MainTitleContract.IMa
                 .build();
         mainTitleComponent.inject(this);
         mainTitleComponent.inject(mainTitlePresenter);
-        View view = inflater.inflate(R.layout.fragment_main_title, mtitletemp, true);
+        View view = inflater.inflate(R.layout.main_title, mtitletemp, true);
         mtitletemp = (RelativeLayout) view.findViewById(R.id.main_title);
         unbinder = ButterKnife.bind(this, view);
         backToHome();

@@ -59,7 +59,7 @@ public class TagListViewAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.listview_songtags_item, null);
+            convertView = inflater.inflate(R.layout.play_dialog_item, null);
             holder.tagcb = (CheckBox) convertView.findViewById(R.id.tag_checkbox);
             convertView.setTag(holder);
         } else {

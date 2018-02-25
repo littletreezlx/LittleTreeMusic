@@ -52,7 +52,7 @@ public class ViewPagerFragment extends Fragment implements ViewPagerContract.IVi
                 .build();
         viewPagerComponent.inject(this);
         viewPagerComponent.inject(viewPagerPresenter);
-        View view = inflater.inflate(R.layout.fragment_play_viewpager, viewPagerTemp, true);
+        View view = inflater.inflate(R.layout.play_viewpager, viewPagerTemp, true);
         viewPagerTemp = (RelativeLayout) view.findViewById(R.id.play_viewpager);
         unbinder = ButterKnife.bind(this, view);
 

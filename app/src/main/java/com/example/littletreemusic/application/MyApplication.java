@@ -14,11 +14,8 @@ import com.example.littletreemusic.di.Component.app.DaggerAppComponent;
 import com.example.littletreemusic.di.Component.app.MusicServiceModule;
 import com.example.littletreemusic.di.Component.app.NetWorkModule;
 import com.example.littletreemusic.service.MusicService;
-import com.example.littletreemusic.service.MusicServicePresenter;
 
 import org.litepal.LitePal;
-
-import javax.inject.Inject;
 
 public class MyApplication extends Application {
 
@@ -27,10 +24,8 @@ public class MyApplication extends Application {
     ServiceConnection serviceConnection;
     MusicService musicService;
     Intent serviceIntent;
+    String url="http://192.168.2.172:8080";
 
-
-    @Inject
-    MusicServicePresenter musicServicePresenter;
 
     @Override
     public void onCreate() {
@@ -45,15 +40,13 @@ public class MyApplication extends Application {
                 musicService = ((MusicService.MusicBinder) service).getService();
                 mAppComponent = DaggerAppComponent.builder()
                         .appModule(new AppModule(MyApplication.this))
-                        .netWorkModule(new NetWorkModule("http://192.168.2.1:8080"))
+                        .netWorkModule(new NetWorkModule(url))
                         .musicServiceModule(new MusicServiceModule(musicService))
                         .build();
-                mAppComponent.inject(MyApplication.this);
-                mAppComponent.inject(musicServicePresenter);
-                mAppComponent.inject(musicService);
+//                mAppComponent.inject(MyApplication.this);
+//                mAppComponent.inject(musicServicePresenter);
+//                mAppComponent.inject(musicService);
 
-
-                Log.d("app", musicService.toString());
             }
 
             @Override
@@ -61,9 +54,6 @@ public class MyApplication extends Application {
             }
         };
         bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-
-//        Log.d("app", musicService.toString());
-
     }
 
     @Override

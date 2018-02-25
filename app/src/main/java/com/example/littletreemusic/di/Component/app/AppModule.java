@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.example.littletreemusic.di.scopes.PerApp;
 import com.example.littletreemusic.presenter.PicturePresenter;
+import com.example.littletreemusic.util.NetworkUtil;
 
 import dagger.Module;
 import dagger.Provides;
@@ -17,10 +18,18 @@ public class AppModule {
 
     PicturePresenter mPicturePresenter;
     Application mApplication;
+    NetworkUtil mNetworkUtil;
 
     public AppModule(Application application) {
         mApplication = application;
         mPicturePresenter=new PicturePresenter();
+        mNetworkUtil=new NetworkUtil(application);
+    }
+
+    @Provides
+    @PerApp
+    NetworkUtil networkUtil(Application application) {
+        return mNetworkUtil;
     }
 
     @Provides

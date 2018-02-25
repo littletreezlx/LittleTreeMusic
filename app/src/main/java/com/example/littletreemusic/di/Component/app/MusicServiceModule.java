@@ -2,7 +2,6 @@ package com.example.littletreemusic.di.Component.app;
 
 import com.example.littletreemusic.di.scopes.PerApp;
 import com.example.littletreemusic.service.MusicService;
-import com.example.littletreemusic.service.MusicServicePresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,11 +14,11 @@ import dagger.Provides;
 public class MusicServiceModule {
 
     MusicService mMusicService;
-    MusicServicePresenter mMusicServicePresenter;
+//    MusicServicePresenter mMusicServicePresenter;
 
     public MusicServiceModule(MusicService musicService) {
         mMusicService=musicService;
-        mMusicServicePresenter=new MusicServicePresenter();
+//        mMusicServicePresenter=new MusicServicePresenter();
     }
 
     @Provides
@@ -28,10 +27,10 @@ public class MusicServiceModule {
         return mMusicService;
     }
 
-    @Provides
-    @PerApp
-    MusicServicePresenter provideMusicServicePresenter() {
-        return mMusicServicePresenter;
-    }
+//    @Provides
+//    @PerApp
+//    MusicServicePresenter provideMusicServicePresenter() {
+//        return mMusicServicePresenter;
+//    }
 
 }

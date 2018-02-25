@@ -49,7 +49,7 @@ public class MainBodyFragment extends Fragment {
                 .mainActivityComponent(((MainActivity)getActivity()).getMainActivityComponent())
                 .build();
         mainBodyComponent.inject(this);
-        View view = inflater.inflate(R.layout.fragment_main_body, mBodytemp, true);
+        View view = inflater.inflate(R.layout.main_body, mBodytemp, true);
         mBodytemp = (RelativeLayout) view.findViewById(R.id.main_body);
         unbinder = ButterKnife.bind(this, view);
 

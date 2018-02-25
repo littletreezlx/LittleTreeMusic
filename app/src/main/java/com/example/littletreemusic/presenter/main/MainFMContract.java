@@ -1,7 +1,5 @@
 package com.example.littletreemusic.presenter.main;
 
-import android.content.Context;
-
 import com.example.littletreemusic.presenter.IPresenter;
 import com.example.littletreemusic.presenter.IView;
 
@@ -22,7 +20,7 @@ public interface MainFMContract {
     interface IMainFMPresenter extends IPresenter<IMainFMView> {
 
 
-        void init(Context context);
+        void init();
 
 //        跳转歌曲列表
         void toFullSongList();

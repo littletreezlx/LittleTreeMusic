@@ -26,7 +26,7 @@ public class PlayActivity extends BaseActivity{
 
     @Override
     public void setView() {
-        setContentView(R.layout.activity_play);
+        setContentView(R.layout.play_activity);
     }
 
     @Override

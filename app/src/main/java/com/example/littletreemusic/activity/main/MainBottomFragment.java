@@ -72,7 +72,7 @@ public class MainBottomFragment extends Fragment {
         DaggerMainBottomComponent.builder()
                 .mainActivityComponent(((MainActivity) getActivity()).getMainActivityComponent())
                 .build().inject(this);
-        View view = inflater.inflate(R.layout.fragment_main_bottom, container, false);
+        View view = inflater.inflate(R.layout.main_bottom, container, false);
         mbottomtemp = (RelativeLayout) view.findViewById(R.id.main_bottom);
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);

@@ -81,7 +81,7 @@ public class PlayBottomFragment extends Fragment implements PlayBottomContract.I
                 .build();
         playBottomComponent.inject(this);
         playBottomComponent.inject(playBottomPresenter);
-        View view = inflater.inflate(R.layout.fragment_play_bottom, mbottomtemp, true);
+        View view = inflater.inflate(R.layout.play_bottom, mbottomtemp, true);
         mbottomtemp = (PercentRelativeLayout) view.findViewById(R.id.play_bottom);
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
@@ -159,7 +159,7 @@ public class PlayBottomFragment extends Fragment implements PlayBottomContract.I
     @Override
     public void showTaglistDialog(List<String> tagList){
         LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.listview_tag, (ViewGroup)getActivity().findViewById(R.id.listview_tag));
+        View layout = inflater.inflate(R.layout.play_dialog, (ViewGroup)getActivity().findViewById(R.id.listview_tag));
         Button addTagBtn = (Button) layout.findViewById(R.id.add_tag);
         Button applyTagBtn = (Button) layout.findViewById(R.id.apply_tag);
         addTagBtn.setOnClickListener(new View.OnClickListener() {

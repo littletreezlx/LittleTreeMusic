@@ -36,7 +36,7 @@ public class LaunchActivity extends AppCompatActivity {
             window.setNavigationBarColor(Color.TRANSPARENT);
 
         }
-        setContentView(R.layout.activity_launch);
+        setContentView(R.layout.launch_activity);
 
         new Handler().postDelayed(new Runnable() {
             @Override

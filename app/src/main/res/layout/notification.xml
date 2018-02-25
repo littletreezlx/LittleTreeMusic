@@ -15,7 +15,7 @@
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:padding="5dp"
-        android:background="@drawable/selector_btnsrc_press"
+        android:background="@drawable/selector_btn_pressed"
         android:src="@drawable/ic_music_note_white_24dp"
         />
 
@@ -59,7 +59,7 @@
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:padding="5dp"
-        android:background="@drawable/selector_btnsrc_press"
+        android:background="@drawable/selector_btn_pressed"
         android:src="@drawable/ic_skip_previous_white_24dp" />
 
 
@@ -71,7 +71,7 @@
         android:visibility="gone"
         android:scaleType="fitCenter"
         android:padding="5dp"
-        android:background="@drawable/selector_btnsrc_press"
+        android:background="@drawable/selector_btn_pressed"
         android:src="@drawable/ic_play_arrow_white_24dp" />
 
     <ImageButton
@@ -82,7 +82,7 @@
         android:visibility="visible"
         android:scaleType="fitCenter"
         android:padding="5dp"
-        android:background="@drawable/selector_btnsrc_press"
+        android:background="@drawable/selector_btn_pressed"
         android:src="@drawable/ic_pause_white_24dp" />
 
     <ImageButton
@@ -92,7 +92,7 @@
         android:layout_weight="1"
         android:scaleType="fitCenter"
         android:padding="5dp"
-        android:background="@drawable/selector_btnsrc_press"
+        android:background="@drawable/selector_btn_pressed"
         android:src="@drawable/ic_skip_next_white_24dp"
         />
 

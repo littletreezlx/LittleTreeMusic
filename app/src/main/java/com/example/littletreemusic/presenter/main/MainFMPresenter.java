@@ -2,7 +2,6 @@ package com.example.littletreemusic.presenter.main;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 
@@ -14,15 +13,20 @@ import com.example.littletreemusic.activity.main.MainSongListFragment;
 import com.example.littletreemusic.activity.main.MainTagListFragment;
 import com.example.littletreemusic.activity.main.MainTitleFragment;
 
+import javax.inject.Inject;
+
 
 public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
 
-    public boolean isHomePage;
-    private MainTitleFragment title0;
+
+    @Inject
+    MainActivity mainActivity;
+
+
+    MainTitleFragment title0;
     MainBodyFragment body0;
     MainBottomFragment bottom0;
     MainSongListFragment songList;
-//    还有一个playList
     MainSongListFragment playList;
     MainTagListFragment tagList;
 
@@ -30,13 +34,14 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
     FragmentManager fm;
     FragmentTransaction transaction;
 
+    public boolean isHomePage=true;
+
+
     @Override
-    public void init(Context context) {
-        MainActivity mainActivity=(MainActivity) context;
+    public void init() {
         mDrawerLayout=mainActivity.drawerLayout;
         fm=mainActivity.getFragmentManager();
         transaction=fm.beginTransaction();
-
         this.title0 = new MainTitleFragment();
         this.body0 = new MainBodyFragment();
         this.bottom0 = new MainBottomFragment();

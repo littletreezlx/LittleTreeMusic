@@ -9,8 +9,10 @@ import com.example.littletreemusic.di.Component.app.AppComponent;
 import com.example.littletreemusic.di.scopes.PerActivity;
 import com.example.littletreemusic.presenter.PicturePresenter;
 import com.example.littletreemusic.presenter.main.MainFMPresenter;
-import com.example.littletreemusic.presenter.main.SearchSongPresenter;
+import com.example.littletreemusic.presenter.main.MainActivityPresenter;
+import com.example.littletreemusic.presenter.navigation.NavFMPresenter;
 import com.example.littletreemusic.service.MusicService;
+import com.example.littletreemusic.util.NetworkUtil;
 import com.google.gson.Gson;
 
 import dagger.Component;
@@ -29,7 +31,9 @@ public interface MainActivityComponent {
 
     void inject(MainFMPresenter mainFMPresenter);
 
-    void inject(SearchSongPresenter searchSongPresenter);
+    void inject(NavFMPresenter navFMPresenter);
+
+    void inject(MainActivityPresenter mainActivityPresenter);
 
     Application getApplication();
     SharedPreferences getSharedPreferences();
@@ -37,11 +41,13 @@ public interface MainActivityComponent {
     Retrofit getRetrofit();
     PicturePresenter getPicturePresenter();
     MusicService getMusicService();
+    NetworkUtil getNetworkUtil();
 
 
 
     MainFMPresenter getMainFMPresenter();
+    NavFMPresenter getNavFMPresenter();
     MainActivity getMainActivity();
-    SearchSongPresenter getSearchSongPresenter();
+    MainActivityPresenter getSearchSongPresenter();
 
 }

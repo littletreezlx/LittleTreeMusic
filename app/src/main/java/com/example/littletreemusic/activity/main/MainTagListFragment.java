@@ -54,7 +54,7 @@ public class MainTagListFragment extends Fragment implements TagListContract.ITa
                 .build();
         mainTagListComponent.inject(this);
         mainTagListComponent.inject(tagListPresenter);
-        View view = inflater.inflate(R.layout.fragment_main_taglist, mbodytemp, true);
+        View view = inflater.inflate(R.layout.main_taglist, mbodytemp, true);
         mbodytemp = (RelativeLayout) view.findViewById(R.id.main_body);
         unbinder = ButterKnife.bind(this, view);
 

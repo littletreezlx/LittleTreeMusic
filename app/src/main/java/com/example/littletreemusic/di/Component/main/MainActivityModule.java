@@ -2,8 +2,10 @@ package com.example.littletreemusic.di.Component.main;
 
 import com.example.littletreemusic.activity.main.MainActivity;
 import com.example.littletreemusic.di.scopes.PerActivity;
+import com.example.littletreemusic.presenter.main.MainActivityContract;
+import com.example.littletreemusic.presenter.main.MainActivityPresenter;
 import com.example.littletreemusic.presenter.main.MainFMPresenter;
-import com.example.littletreemusic.presenter.main.SearchSongPresenter;
+import com.example.littletreemusic.presenter.navigation.NavFMPresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -17,17 +19,21 @@ import dagger.Provides;
 public class MainActivityModule {
 
 
+    NavFMPresenter mNavFMPresenter;
     MainFMPresenter mMainFMPresenter;
     MainActivity mMainActivity;
-    SearchSongPresenter mSearchSongPresenter;
+    MainActivityPresenter mMainActivityPresenter;
+    MainActivityContract.IMainActivityView mIMainActivityView;
 
 
-    public MainActivityModule(MainActivity mainActivity){
+    public MainActivityModule(MainActivity mainActivity, MainActivityContract.IMainActivityView iMainActivityView){
+        mIMainActivityView=iMainActivityView;
         mMainActivity=mainActivity;
 //        mMainFMPresenter=new MainFMPresenter(mainActivity.getFragmentManager(),
 //                mainActivity.drawerLayout);
+        mNavFMPresenter=new NavFMPresenter();
         mMainFMPresenter=new MainFMPresenter();
-        mSearchSongPresenter=new SearchSongPresenter();
+        mMainActivityPresenter =new MainActivityPresenter();
 
     }
 
@@ -45,11 +51,21 @@ public class MainActivityModule {
 
     @PerActivity
     @Provides
-    SearchSongPresenter provideSearchSongPresenter(){
-        return mSearchSongPresenter;
+    NavFMPresenter provideNavFMPresenter(){
+        return mNavFMPresenter;
     }
 
+    @PerActivity
+    @Provides
+    MainActivityPresenter provideMainActivityPresente(){
+        return mMainActivityPresenter;
+    }
 
+    @PerActivity
+    @Provides
+    MainActivityContract.IMainActivityView provideIMainActivityView(){
+        return mIMainActivityView;
+    }
 
 
 

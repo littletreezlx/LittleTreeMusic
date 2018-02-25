@@ -60,7 +60,7 @@ public class PlayTitleFragment extends Fragment implements PlayTitleContract.IPl
                 .build();
         playTitleComponent.inject(this);
         playTitleComponent.inject(playTitlePresenter);
-        View view = inflater.inflate(R.layout.fragment_play_title, mtitletemp, true);
+        View view = inflater.inflate(R.layout.play_title, mtitletemp, true);
         mtitletemp = (RelativeLayout) view.findViewById(R.id.play_title);
         unbinder = ButterKnife.bind(this, view);
 

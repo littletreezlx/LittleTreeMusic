@@ -1,10 +1,12 @@
 package com.example.littletreemusic.util;
 
+import com.example.littletreemusic.pojo.LoginInfo;
 import com.example.littletreemusic.pojo.ServerSongInfo;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -25,7 +27,7 @@ import retrofit2.http.Part;
     Observable<Response<String>> register(@Body RequestBody requestBody);
 
     @POST("user/login")
-    Observable<Response<String>> login(@Body RequestBody requestBody);
+    Observable<Response<ResponseBody>> login(@Body LoginInfo loginInfo);
 
     @Headers({"Content-Type: application/json"})
     @POST("songinfo/push")
