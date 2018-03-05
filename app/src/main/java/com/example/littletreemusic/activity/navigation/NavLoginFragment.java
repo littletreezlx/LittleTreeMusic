@@ -20,6 +20,7 @@ import com.example.littletreemusic.di.Component.navigation.NavLoginModule;
 import com.example.littletreemusic.presenter.navigation.NavFMPresenter;
 import com.example.littletreemusic.presenter.navigation.NavLoginContract;
 import com.example.littletreemusic.presenter.navigation.NavLoginPresenter;
+import com.example.littletreemusic.util.common.ToastUtil;
 
 import javax.inject.Inject;
 
@@ -56,6 +57,8 @@ public class NavLoginFragment extends BaseFragment implements NavLoginContract.I
     NavFMPresenter navFMPresenter;
     @Inject
     MainActivity mainActivity;
+    @Inject
+    ToastUtil toastUtil;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,10 +75,9 @@ public class NavLoginFragment extends BaseFragment implements NavLoginContract.I
 
     @Override
     public void showLoginSucceed() {
-        Toast.makeText(getActivity(), "登陆成功", Toast.LENGTH_SHORT).show();
+        toastUtil.showShort("登陆成功");
         btn_login.setClickable(true);
         mainActivity.turnLoginToSign();
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.littletreemusic.util;
 
 import com.example.littletreemusic.pojo.LoginInfo;
+import com.example.littletreemusic.pojo.RegisterMsg;
 import com.example.littletreemusic.pojo.ServerSongInfo;
 
 import io.reactivex.Observable;
@@ -23,11 +24,16 @@ import retrofit2.http.Part;
     public interface CommunityRetrofitRequest {
 
 
-    @POST("user/register")
-    Observable<Response<String>> register(@Body RequestBody requestBody);
+    @POST("/register")
+    Observable<Response<ResponseBody>> register(@Body RegisterMsg registerMsg);
 
-    @POST("user/login")
+    @POST("/login")
     Observable<Response<ResponseBody>> login(@Body LoginInfo loginInfo);
+
+    @POST("/alterpd")
+    Observable<Response<ResponseBody>> alterpd(@Body LoginInfo loginInfo);
+
+
 
     @Headers({"Content-Type: application/json"})
     @POST("songinfo/push")

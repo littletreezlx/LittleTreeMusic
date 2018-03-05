@@ -18,7 +18,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.LaunchActivity">
+        <activity android:name=".activity.LaunchActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,9 +32,7 @@
         <activity
             android:name=".activity.play.PlayActivity"
             android:launchMode="singleTop"></activity>
-        <activity
-            android:name=".activity.navigation.NavChangeBPFragment"
-            android:launchMode="singleTop"></activity>
+
 
         <service
             android:name=".service.MusicService"

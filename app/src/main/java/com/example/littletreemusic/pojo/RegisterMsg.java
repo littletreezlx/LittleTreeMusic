@@ -1,15 +1,13 @@
 package com.example.littletreemusic.pojo;
 
-import java.util.List;
-
 /**
  * Created by 春风亭lx小树 on 2018/2/2.
  */
 
-public class RegisterInfo {
+public class RegisterMsg {
 
-    private String account,password,nickName,age,gender,favouriteStyle;
-    private List<String> PreferdTags;
+
+    private String username,password,nickname,age,gender,favouriteStyle;
 
     public String getFavouriteStyle() {
         return favouriteStyle;
@@ -19,20 +17,13 @@ public class RegisterInfo {
         this.favouriteStyle = favouriteStyle;
     }
 
-    public List<String> getPreferdTags() {
-        return PreferdTags;
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setPreferdTags(List<String> preferdTags) {
-        PreferdTags = preferdTags;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -43,12 +34,12 @@ public class RegisterInfo {
         this.password = password;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getnickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setnickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getGender() {

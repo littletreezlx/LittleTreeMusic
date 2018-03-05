@@ -1,132 +1,156 @@
 package com.example.littletreemusic.activity.navigation;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.littletreemusic.R;
 import com.example.littletreemusic.activity.main.MainActivity;
 import com.example.littletreemusic.base.BaseFragment;
-import com.example.littletreemusic.pojo.RegisterInfo;
+import com.example.littletreemusic.di.Component.navigation.DaggerNavRegisterComponent;
+import com.example.littletreemusic.di.Component.navigation.NavRegisterComponent;
+import com.example.littletreemusic.di.Component.navigation.NavRegisterModule;
+import com.example.littletreemusic.pojo.RegisterMsg;
+import com.example.littletreemusic.presenter.navigation.NavFMPresenter;
 import com.example.littletreemusic.presenter.navigation.NavRegisterContract;
-import com.example.littletreemusic.util.CommunityRetrofitRequest;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.example.littletreemusic.presenter.navigation.NavRegisterPresenter;
+import com.example.littletreemusic.util.common.ToastUtil;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-public class NavRegisterFragment extends BaseFragment implements NavRegisterContract.INavRegisterView{
+
+public class NavRegisterFragment extends BaseFragment implements NavRegisterContract.INavRegisterView {
 
 
-    @BindView(R.id.button_register)
-    Button btnRegister;
-    @BindView(R.id.editText_password)
-    EditText editTextPassword;
-    @BindView(R.id.editText_account)
-    EditText editTextAccount;
-    @BindView(R.id.textView0)
-    TextView textView0;
-    @BindView(R.id.editText_nickname)
-    EditText editTextNickname;
-    @BindView(R.id.editText_age)
-    EditText editTextAge;
-    @BindView(R.id.radioButton_man)
-    RadioButton radioButtonMan;
-    @BindView(R.id.radioButton_woman)
-    RadioButton radioButtonWoman;
-    @BindView(R.id.button_back)
-    Button btnBack;
-    @BindView(R.id.radioGroup)
-    RadioGroup radioGroup;
-    @BindView(R.id.spinner_favouritrStyle)
-    Spinner spinner0;
-
+    @BindView(R.id.nav_register_btn_back)
+    ImageButton btn_Back;
+    @BindView(R.id.nav_register_edt_account)
+    EditText edt_Account;
+    @BindView(R.id.nav_register_edt_password)
+    EditText edt_Password;
+    @BindView(R.id.nav_register_edt_confirmpassword)
+    EditText edt_Confirmpassword;
+    @BindView(R.id.nav_register_edt_nickname)
+    EditText edt_Nickname;
+    @BindView(R.id.nav_register_edt_age)
+    EditText edt_Age;
+    @BindView(R.id.nav_register_radiobtn_man)
+    RadioButton radiobtn_Man;
+    @BindView(R.id.nav_register_radiobtn_woman)
+    RadioButton eadiobtn_Woman;
+    @BindView(R.id.nav_register_radiogroup_gender)
+    RadioGroup radiogroup_Gender;
+    @BindView(R.id.nav_register_spinner_favourite)
+    Spinner spinner_Favourite;
+    @BindView(R.id.nav_register_edt_securitycode)
+    EditText edt_Securitycode;
+    @BindView(R.id.nav_register_btn_getsecuritycode)
+    Button btn_Getsecuritycode;
+    @BindView(R.id.nav_register_btn_register)
+    Button btn_Register;
     Unbinder unbinder;
-    private String mParam1;
-    private String mParam2;
+
+    @Inject
+    NavRegisterPresenter navRegisterPresenter;
+    @Inject
+    NavFMPresenter navFMPresenter;
+    @Inject
+    ToastUtil toastUtil;
+//    @Inject
+//    MainActivity mainActivity;
+
     private String gender = "man";
     private String favouriteStyle = "";
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    public static final String baseurl = "http://192.168.1.104:8080/";
-    private BaseAdapter myAdadpter = null;
-
-
-    private OnFragmentInteractionListener mListener;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        NavRegisterComponent navRegisterComponent = DaggerNavRegisterComponent.builder()
+                .mainActivityComponent(((MainActivity) getActivity()).getMainActivityComponent())
+                .navRegisterModule(new NavRegisterModule(this))
+                .build();
+        navRegisterComponent.inject(this);
+        navRegisterComponent.inject(navRegisterPresenter);
         View view = inflater.inflate(R.layout.nav_register, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        RadioGroup radioGroup = (RadioGroup) getActivity().findViewById(R.id.radioGroup);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radiogroup_Gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
+                switch (i){
+                    case R.id.radioButton_man:
+                        gender="男";
+                        break;
+                    case R.id.radioButton_woman:
+                        gender="女";
+                    default:break;
+                }
             }
         });
 
-        spinner0.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spinner_Favourite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 favouriteStyle=adapterView.getItemAtPosition(i).toString();
             }
         });
-
-
-
-
         return view;
     }
 
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void showRegisterSucceed() {
+        navFMPresenter.FromNavRegister();
+        toastUtil.showShort("注册成功");
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void showRegisterFailedReason(String reason) {
+        toastUtil.showShort(reason);
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void showProgressBar() {
+
+    }
+
+    @OnClick({R.id.nav_register_btn_back, R.id.nav_register_btn_getsecuritycode, R.id.nav_register_btn_register})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.nav_register_btn_back:
+                navFMPresenter.FromNavRegister();
+                break;
+            case R.id.nav_register_btn_getsecuritycode:
+//
+                break;
+            case R.id.nav_register_btn_register:
+                String password = edt_Password.getText().toString();
+                String confrimPassword = edt_Confirmpassword.getText().toString();
+                if (password.equals(confrimPassword)){
+                    RegisterMsg registerMsg = new RegisterMsg();
+                    registerMsg.setUsername(edt_Account.getText().toString());
+                    registerMsg.setPassword(edt_Password.getText().toString());
+                    registerMsg.setnickname(edt_Nickname.getText().toString());
+                    registerMsg.setAge(edt_Age.getText().toString());
+                    registerMsg.setGender(gender);
+                    registerMsg.setFavouriteStyle(favouriteStyle);
+                    navRegisterPresenter.register(registerMsg);
+                }else {
+                    showRegisterFailedReason("两次输入密码不一致");
+                }
+                break;
+        }
     }
 
     @Override
@@ -135,84 +159,4 @@ public class NavRegisterFragment extends BaseFragment implements NavRegisterCont
         unbinder.unbind();
     }
 
-    @OnClick({R.id.button_register, R.id.editText_password, R.id.editText_account, R.id.editText_nickname, R.id.editText_age, R.id.radioButton_man, R.id.radioButton_woman, R.id.button_back,R.id.radioGroup,R.id.spinner_favouritrStyle})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.button_register:
-                Retrofit retrofit0 = new Retrofit.Builder()
-                        .baseUrl(baseurl)
-//                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-////                        .addConverterFactory(GsonConverterFactory.create())
-//                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .build();
-                CommunityRetrofitRequest rq = retrofit0.create(CommunityRetrofitRequest.class);
-
-                RegisterInfo registerInfo = new RegisterInfo();
-                registerInfo.setAccount(editTextAccount.getText().toString());
-                registerInfo.setPassword(editTextPassword.getText().toString());
-                registerInfo.setNickName(editTextNickname.getText().toString());
-                registerInfo.setAge(editTextAge.getText().toString());
-                registerInfo.setFavouriteStyle(favouriteStyle);
-                registerInfo.setGender(gender);
-
-                Gson gson = new GsonBuilder().create();
-                String registerInfoJson = gson.toJson(registerInfo);
-
-                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), registerInfoJson);
-                rq.register(body).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Response<String>>() {
-                            @Override
-                            public void accept(Response<String> response) throws Exception {
-                                if (response.body().equals("register succeed")){
-                                    Toast.makeText(getActivity(),"register succeed", Toast.LENGTH_SHORT).show();
-                                    MainActivity mainActivity = (MainActivity) getActivity();
-
-//                                    mainActivity.backFromRegister();
-//                                    Toast.makeText(getActivity(),"go to community", Toast.LENGTH_SHORT).show();
-//                                    mainActivity.gotoCommunity();
-                                }
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                throwable.printStackTrace();
-                            }
-                        });
-                break;
-            case R.id.editText_password:
-                break;
-            case R.id.editText_account:
-                break;
-            case R.id.editText_nickname:
-                break;
-            case R.id.editText_age:
-                break;
-            case R.id.radioButton_man:
-                gender = "man";
-                Toast.makeText(getActivity(), "man", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.radioButton_woman:
-                gender = "woman";
-                Toast.makeText(getActivity(), "woman", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.radioGroup:
-                break;
-            case R.id.spinner_favouritrStyle:
-
-                break;
-            case R.id.button_back:
-
-                break;
-
-            default:
-                break;
-        }
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

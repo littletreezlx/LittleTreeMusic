@@ -1,6 +1,8 @@
 package com.example.littletreemusic.util;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -120,4 +122,37 @@ public class ImageUtil {
         canvas.drawBitmap(bitmap, src, dst, paint);
         return output;
     }
+
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+// 首先通过 inJustDecodeBounds=true 获得图片的尺寸
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+// 然后根据图片分辨率以及我们实际需要展示的大小，计算压缩率
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+// 设置压缩率，并解码
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int width = options.outWidth;
+        final int height = options.outHeight;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            //计算图片高度和我们需要高度的最接近比例值
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            //宽度比例值
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            //取比例值中的较大值作为inSampleSize
+            inSampleSize = heightRatio > widthRatio ? heightRatio : widthRatio;
+        }
+
+        return inSampleSize;
+    }
 }
+
+

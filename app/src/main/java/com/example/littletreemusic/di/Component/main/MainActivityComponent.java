@@ -8,11 +8,12 @@ import com.example.littletreemusic.activity.main.MainActivity;
 import com.example.littletreemusic.di.Component.app.AppComponent;
 import com.example.littletreemusic.di.scopes.PerActivity;
 import com.example.littletreemusic.presenter.PicturePresenter;
-import com.example.littletreemusic.presenter.main.MainFMPresenter;
 import com.example.littletreemusic.presenter.main.MainActivityPresenter;
+import com.example.littletreemusic.presenter.main.MainFMPresenter;
 import com.example.littletreemusic.presenter.navigation.NavFMPresenter;
 import com.example.littletreemusic.service.MusicService;
-import com.example.littletreemusic.util.NetworkUtil;
+import com.example.littletreemusic.util.common.NetworkUtil;
+import com.example.littletreemusic.util.common.ToastUtil;
 import com.google.gson.Gson;
 
 import dagger.Component;
@@ -42,6 +43,7 @@ public interface MainActivityComponent {
     PicturePresenter getPicturePresenter();
     MusicService getMusicService();
     NetworkUtil getNetworkUtil();
+    ToastUtil getToastUtil();
 
 
 

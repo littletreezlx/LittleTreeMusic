@@ -1,4 +1,4 @@
-package com.example.littletreemusic.util;
+package com.example.littletreemusic.util.common;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -17,32 +17,29 @@ public class NetworkUtil {
 
     public NetworkUtil(Context context){
         mConnectivityManager=
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public boolean checkIsConnected(){
-            networkInfo=mConnectivityManager.getActiveNetworkInfo();
-            if (networkInfo == null){
-                return false;
-            }else if (networkInfo.isConnected()){
+        networkInfo=mConnectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+        {
+            if (networkInfo.getState() == NetworkInfo.State.CONNECTED)
+            {
                 return true;
             }
-            else{
-                return false;
-            }
+        }
+        return false;
     }
 
     public boolean checkIsWifi(){
         networkInfo=mConnectivityManager.getActiveNetworkInfo();
         if (checkIsConnected()){
-            if (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
                 return true;
-            }else {
-                return false;
             }
-        }else {
-            return false;
         }
+        return false;
     }
 
 }

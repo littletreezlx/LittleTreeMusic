@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import com.example.littletreemusic.pojo.LoginInfo;
 import com.example.littletreemusic.util.CommunityRetrofitRequest;
-import com.example.littletreemusic.util.NetworkUtil;
+import com.example.littletreemusic.util.common.NetworkUtil;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;

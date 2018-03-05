@@ -142,6 +142,7 @@ public class MainActivityPresenter implements MainActivityContract.IMainActivity
                     }
                 }while (cursor.moveToNext());
             }
+            cursor.close();
         }
 
 //        List<Song> ss=songs;
