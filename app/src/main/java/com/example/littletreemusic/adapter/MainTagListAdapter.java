@@ -17,7 +17,7 @@ import java.util.Random;
  * Created by 春风亭lx小树 on 2017/12/26.
  */
 
-public class TagListRecyclerViewAdapter extends RecyclerView.Adapter<TagListRecyclerViewAdapter.ViewHolder> {
+public class MainTagListAdapter extends RecyclerView.Adapter<MainTagListAdapter.ViewHolder> {
 
     private List<String> tags;
     private Context context;
@@ -36,7 +36,7 @@ public class TagListRecyclerViewAdapter extends RecyclerView.Adapter<TagListRecy
     }
 
 //    构造器
-    public TagListRecyclerViewAdapter(Context context, List<String> tags) {
+    public MainTagListAdapter(Context context, List<String> tags) {
         super();
         this.tags = tags;
         this.context=context;

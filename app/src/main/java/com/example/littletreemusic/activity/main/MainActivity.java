@@ -24,6 +24,7 @@ import com.example.littletreemusic.di.Component.main.DaggerMainActivityComponent
 import com.example.littletreemusic.di.Component.main.MainActivityComponent;
 import com.example.littletreemusic.di.Component.main.MainActivityModule;
 import com.example.littletreemusic.pojo.StringEvent;
+import com.example.littletreemusic.presenter.community.CommunityFMPresenter;
 import com.example.littletreemusic.presenter.main.MainActivityContract;
 import com.example.littletreemusic.presenter.main.MainFMPresenter;
 import com.example.littletreemusic.presenter.main.MainActivityPresenter;
@@ -58,10 +59,12 @@ public class MainActivity extends BaseActivity implements MainActivityContract.I
     NavFMPresenter navFMPresenter;
     @Inject
     MainFMPresenter mainFMPresenter;
+    CommunityFMPresenter communityFMPresenter;
     @Inject
     MainActivityPresenter mainActivityPresenter;
     @Inject
     MusicService musicService;
+
 
     MainActivityComponent mainActivityComponent;
     ServiceConnection serviceConnection;
@@ -227,6 +230,8 @@ public class MainActivity extends BaseActivity implements MainActivityContract.I
         if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
             drawerLayout.closeDrawer(GravityCompat.END);
         } else if (navFMPresenter.nowLocation != 0) {
+            navFMPresenter.backPressed();
+        } else if (communityFMPresenter.nowLocation != 0) {
             navFMPresenter.backPressed();
         } else if (!mainFMPresenter.isHomePage) {
             mainFMPresenter.backPressed();

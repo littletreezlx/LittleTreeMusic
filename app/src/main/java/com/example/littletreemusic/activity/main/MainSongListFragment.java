@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.littletreemusic.R;
-import com.example.littletreemusic.adapter.SongListRecyclerViewAdapter;
+import com.example.littletreemusic.adapter.MainSongListAdapter;
 import com.example.littletreemusic.di.Component.main.DaggerMainSongListComponent;
 import com.example.littletreemusic.di.Component.main.MainSongListComponent;
 import com.example.littletreemusic.di.Component.main.MainSongListModule;
@@ -56,7 +56,7 @@ public class MainSongListFragment extends Fragment implements SongListContract.I
 
 
     boolean isVisible;
-    SongListRecyclerViewAdapter adapter;
+    MainSongListAdapter adapter;
     RelativeLayout mbodytemp;
     boolean haveSentSongs=false;
     int viewId = -1;
@@ -86,8 +86,8 @@ public class MainSongListFragment extends Fragment implements SongListContract.I
     public void init() {
         int mode = getArguments().getInt("mode");
         final List<Song> songList= songListPresenter.findSongListByTagPosition(mode);
-        adapter = new SongListRecyclerViewAdapter(songList);
-        adapter.setOnRecyclerClickListener(new SongListRecyclerViewAdapter.OnRecyclerClickListener() {
+        adapter = new MainSongListAdapter(songList);
+        adapter.setOnRecyclerClickListener(new MainSongListAdapter.OnRecyclerClickListener() {
             @Override
             public void onImageClick(View view, int position) {
                 Song song = new Song();

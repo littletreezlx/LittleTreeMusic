@@ -2,6 +2,7 @@ package com.example.littletreemusic.di.Component.main;
 
 import com.example.littletreemusic.activity.main.MainActivity;
 import com.example.littletreemusic.di.scopes.PerActivity;
+import com.example.littletreemusic.presenter.community.CommunityFMPresenter;
 import com.example.littletreemusic.presenter.main.MainActivityContract;
 import com.example.littletreemusic.presenter.main.MainActivityPresenter;
 import com.example.littletreemusic.presenter.main.MainFMPresenter;
@@ -19,52 +20,60 @@ import dagger.Provides;
 public class MainActivityModule {
 
 
-    NavFMPresenter mNavFMPresenter;
-    MainFMPresenter mMainFMPresenter;
-    MainActivity mMainActivity;
-    MainActivityPresenter mMainActivityPresenter;
-    MainActivityContract.IMainActivityView mIMainActivityView;
+    NavFMPresenter navFMPresenter;
+    CommunityFMPresenter communityFMPresenter;
+    MainFMPresenter mainFMPresenter;
+    MainActivity mainActivity;
+    MainActivityPresenter mainActivityPresenter;
+    MainActivityContract.IMainActivityView iMainActivityView;
 
 
     public MainActivityModule(MainActivity mainActivity, MainActivityContract.IMainActivityView iMainActivityView){
-        mIMainActivityView=iMainActivityView;
-        mMainActivity=mainActivity;
+        this.iMainActivityView=iMainActivityView;
+        this.mainActivity=mainActivity;
 //        mMainFMPresenter=new MainFMPresenter(mainActivity.getFragmentManager(),
 //                mainActivity.drawerLayout);
-        mNavFMPresenter=new NavFMPresenter();
-        mMainFMPresenter=new MainFMPresenter();
-        mMainActivityPresenter =new MainActivityPresenter();
+        navFMPresenter=new NavFMPresenter();
+        mainFMPresenter=new MainFMPresenter();
+        communityFMPresenter=new CommunityFMPresenter();
+        mainActivityPresenter =new MainActivityPresenter();
 
     }
 
     @PerActivity
     @Provides
     MainActivity provideMainActivity(){
-        return mMainActivity;
+        return mainActivity;
     }
 
     @PerActivity
     @Provides
     MainFMPresenter provideMainFMPresenter(){
-        return mMainFMPresenter;
+        return mainFMPresenter;
+    }
+
+    @PerActivity
+    @Provides
+    CommunityFMPresenter provideCommunityFMPresenter(){
+        return communityFMPresenter;
     }
 
     @PerActivity
     @Provides
     NavFMPresenter provideNavFMPresenter(){
-        return mNavFMPresenter;
+        return navFMPresenter;
     }
 
     @PerActivity
     @Provides
     MainActivityPresenter provideMainActivityPresente(){
-        return mMainActivityPresenter;
+        return mainActivityPresenter;
     }
 
     @PerActivity
     @Provides
     MainActivityContract.IMainActivityView provideIMainActivityView(){
-        return mIMainActivityView;
+        return iMainActivityView;
     }
 
 

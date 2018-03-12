@@ -24,7 +24,7 @@ public class MyApplication extends Application {
     ServiceConnection serviceConnection;
     MusicService musicService;
     Intent serviceIntent;
-    String url="http://192.168.2.172:8080";
+    String url="http://192.168.2.172:8080/";
 
 
     @Override

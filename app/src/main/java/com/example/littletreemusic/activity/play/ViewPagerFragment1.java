@@ -11,13 +11,9 @@ import android.widget.ImageView;
 import com.example.littletreemusic.R;
 import com.example.littletreemusic.pojo.Song;
 import com.example.littletreemusic.presenter.PicturePresenter;
-import com.example.littletreemusic.service.MusicService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.litepal.crud.DataSupport;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -44,23 +40,23 @@ public class ViewPagerFragment1 extends Fragment {
         View view = inflater.inflate(R.layout.play_viewpager1, container, false);
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
-        updateAlbum();
+//        updateAlbum();
         return view;
     }
 
-    public void updateAlbum() {
-        List<Song> playingList = DataSupport.where("uri=?", MusicService.playingUriStr).find(Song.class);
-        if (playingList != null && playingList.size() != 0) {
-            Song playingSong = playingList.get(0);
-            String uriStr = playingSong.getUri();
-            Bitmap bitmap = picturePresenter.findBitmapByFilePath(uriStr);
-            if (bitmap != null){
-                iv_album.setImageBitmap(bitmap);
-            }
-        }
-    }
+//    public void updateAlbum() {
+//        List<Song> playingList = DataSupport.where("uri=?", MusicService.playingUriStr).find(Song.class);
+//        if (playingList != null && playingList.size() != 0) {
+//            Song playingSong = playingList.get(0);
+//            String uriStr = playingSong.getUri();
+//            Bitmap bitmap = picturePresenter.findBitmapByFilePath(uriStr);
+//            if (bitmap != null){
+//                iv_album.setImageBitmap(bitmap);
+//            }
+//        }
+//    }
 
-    @Subscribe
+    @Subscribe(sticky = true)
     public void onEvent(Song song){
         Bitmap bitmap = picturePresenter.findBitmapByFilePath(song.getUri());
         if (bitmap != null){

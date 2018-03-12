@@ -12,9 +12,12 @@ import android.widget.RelativeLayout;
 import com.example.littletreemusic.R;
 import com.example.littletreemusic.activity.main.MainActivity;
 import com.example.littletreemusic.adapter.GridViewAdapter0;
-import com.example.littletreemusic.di.Component.main.DaggerMainBodyComponent;
-import com.example.littletreemusic.di.Component.main.MainBodyComponent;
-import com.example.littletreemusic.presenter.main.MainFMPresenter;
+import com.example.littletreemusic.di.Component.community.CommunityHomeComponent;
+import com.example.littletreemusic.di.Component.community.CommunityHomeModule;
+import com.example.littletreemusic.di.Component.community.DaggerCommunityHomeComponent;
+import com.example.littletreemusic.presenter.community.CommunityFMPresenter;
+import com.example.littletreemusic.presenter.community.CommunityHomeContract;
+import com.example.littletreemusic.presenter.community.CommunityHomePresenter;
 
 import javax.inject.Inject;
 
@@ -27,30 +30,36 @@ import butterknife.Unbinder;
  * Created by ZLX Vincent on 2017/8/30.
  */
 
-public class CommunityHomeFragment extends Fragment {
+public class CommunityHomeFragment extends Fragment implements CommunityHomeContract.ICommunityHomeView {
 
-    GridViewAdapter0 gridViewAdapter0;
     @BindView(R.id.fragment_body_gridview)
     GridView gridView;
-
-    RelativeLayout mBodytemp;
-
-    private String[] titles = new String[]{"音乐", "最爱", "分类", "文件"};
-    private int[] images = new int[]{R.drawable.icon_note1, R.drawable.icon_favorites, R.drawable.icon_folder2, R.drawable.icon_folder};
-
-
     Unbinder unbinder;
 
     @Inject
-    MainFMPresenter mainFMPresenter;
+    CommunityFMPresenter communityFMPresenter;
+    @Inject
+    CommunityHomePresenter communityHomePresenter;
+
+    GridViewAdapter0 gridViewAdapter0;
+    RelativeLayout mBodytemp;
+
+
+
+    private String[] titles = new String[]{"猜你喜欢", "看图挑歌", "推荐排行", "敬请期待"};
+    private int[] images = new int[]{R.drawable.icon_luck_100px_white, R.drawable.icon_picture_100px_white
+            , R.drawable.icon_leaderboard_100px_white, R.drawable.icon_live_100px_white};
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
-        MainBodyComponent mainBodyComponent=DaggerMainBodyComponent.builder()
-                .mainActivityComponent(((MainActivity)getActivity()).getMainActivityComponent())
+        CommunityHomeComponent communityHomeComponent = DaggerCommunityHomeComponent.builder()
+                .mainActivityComponent(((MainActivity) getActivity()).getMainActivityComponent())
+                .communityHomeModule(new CommunityHomeModule(this))
                 .build();
-        mainBodyComponent.inject(this);
-        View view = inflater.inflate(R.layout.main_body, mBodytemp, true);
+        communityHomeComponent.inject(this);
+        communityHomeComponent.inject(communityHomePresenter);
+        View view = inflater.inflate(R.layout.com_home, mBodytemp, true);
         mBodytemp = (RelativeLayout) view.findViewById(R.id.main_body);
         unbinder = ButterKnife.bind(this, view);
 
@@ -61,16 +70,16 @@ public class CommunityHomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        mainFMPresenter.toFullSongList();
+                        communityFMPresenter.toRandomSong();
                         break;
                     case 1:
-                        mainFMPresenter.toPlayList();
+                        communityFMPresenter.toRandomPicture();
                         break;
                     case 2:
-                        mainFMPresenter.toTagList();
+                        communityFMPresenter.toTopSong();
                         break;
                     case 3:
-                        mainFMPresenter.toCommunity();
+                        communityFMPresenter.toLive();
                         break;
                     default:
                         break;
@@ -86,6 +95,7 @@ public class CommunityHomeFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
 }
 
 

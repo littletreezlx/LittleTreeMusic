@@ -24,6 +24,7 @@ public class Song extends DataSupport {
     private String album;
     private String uri;
     private String lyricUri;
+    private String imageUri;
     private String sortLetter;
 
     private long duration;
@@ -118,6 +119,14 @@ public class Song extends DataSupport {
 
     public void setLyricUri(String lyricUri) {
         this.lyricUri = lyricUri;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     public String getSortLetter() {

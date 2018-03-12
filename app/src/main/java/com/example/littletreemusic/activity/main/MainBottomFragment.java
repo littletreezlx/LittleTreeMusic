@@ -82,19 +82,19 @@ public class MainBottomFragment extends Fragment {
     }
 
 //    读取上次关闭时的歌
-    public void initLastSongText(){
-        String lastTitle=sp.getString("playing_Title","no");
-        String lastArtist=sp.getString("playing_Artist","no");
-        String lastUri=sp.getString("playing_Uri","no");
-        if(!lastTitle.equals("no")) {
-            tv_Title.setText(lastTitle);
-            tv_Artist.setText(lastArtist);
-            Bitmap bitmap = picturePresenter.findBitmapByFilePath(playingSong.getUri());
-            if (bitmap != null) {
-                btn_Album.setImageBitmap(bitmap);
-            }
-        }
-    }
+//    public void initLastSongText(){
+//        String lastTitle=sp.getString("playing_Title","no");
+//        String lastArtist=sp.getString("playing_Artist","no");
+//        String lastUri=sp.getString("playing_Uri","no");
+//        if(!lastTitle.equals("no")) {
+//            tv_Title.setText(lastTitle);
+//            tv_Artist.setText(lastArtist);
+//            Bitmap bitmap = picturePresenter.findBitmapByFilePath(playingSong.getUri());
+//            if (bitmap != null) {
+//                btn_Album.setImageBitmap(bitmap);
+//            }
+//        }
+//    }
 
     //更新歌名，歌手,封面
     public void updateAll() {
@@ -121,10 +121,13 @@ public class MainBottomFragment extends Fragment {
 //        }
 //    }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(Song song) {
-        playingSong = song;
-        updateAll();
+        Bitmap bitmap = picturePresenter.findBitmapByFilePath(song.getUri());
+        if (bitmap != null){
+            btn_Album.setImageBitmap(bitmap);
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -146,7 +149,7 @@ public class MainBottomFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateAll();
+//        updateAll();
     }
 
     @Override

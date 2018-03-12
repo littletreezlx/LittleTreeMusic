@@ -21,7 +21,7 @@ import java.util.List;
  * Created by 春风亭lx小树 on 2017/12/14.
  */
 
-public class TagListViewAdapter extends BaseAdapter {
+public class PlayTagsAdapter extends BaseAdapter {
 
     Context context;
     List<String> list=new ArrayList<>();
@@ -29,7 +29,7 @@ public class TagListViewAdapter extends BaseAdapter {
     public static List<String> adcheckedTags=new ArrayList<>();
 
 
-    public TagListViewAdapter(Context context, List list){
+    public PlayTagsAdapter(Context context, List list){
         this.context = context;
         this.list = list;
     }

@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.littletreemusic.R;
-import com.example.littletreemusic.adapter.TagListViewAdapter;
+import com.example.littletreemusic.adapter.PlayTagsAdapter;
 import com.example.littletreemusic.di.Component.play.DaggerPlayBottomComponent;
 import com.example.littletreemusic.di.Component.play.PlayBottomComponent;
 import com.example.littletreemusic.di.Component.play.PlayBottomModule;
@@ -70,7 +70,7 @@ public class PlayBottomFragment extends Fragment implements PlayBottomContract.I
     @Inject
     MusicService musicService;
 
-    TagListViewAdapter adapter;
+    PlayTagsAdapter adapter;
     ListView listView;
 
     @Override
@@ -130,7 +130,7 @@ public class PlayBottomFragment extends Fragment implements PlayBottomContract.I
 //        btn_Pause.setVisibility(View.VISIBLE);
 //    }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(StringEvent stringEvent) {
         switch (stringEvent.getStr()){
             case "start":
@@ -175,7 +175,7 @@ public class PlayBottomFragment extends Fragment implements PlayBottomContract.I
             }
         });
         listView = (ListView) layout.findViewById(R.id.mylistview);
-        adapter = new TagListViewAdapter(getActivity(), tagList);
+        adapter = new PlayTagsAdapter(getActivity(), tagList);
         listView.setAdapter(adapter);
         listView.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -201,7 +201,7 @@ public class PlayBottomFragment extends Fragment implements PlayBottomContract.I
                 return false;
             }
         });
-        TagListViewAdapter.adcheckedTags.clear();
+        PlayTagsAdapter.adcheckedTags.clear();
         AlertDialog.Builder builder0= new AlertDialog.Builder(getActivity());
         builder0.setView(layout).create().show();
     }
@@ -246,7 +246,7 @@ public class PlayBottomFragment extends Fragment implements PlayBottomContract.I
                 Song playingSong = DataSupport.where("uri=?", MusicService.playingUriStr).find(Song.class).get(0);
                 int updateId = playingSong.getId();
                 Song updateSong = new Song();
-                updateSong.setTagList(TagListViewAdapter.adcheckedTags);
+                updateSong.setTagList(PlayTagsAdapter.adcheckedTags);
                 updateSong.update(updateId);
 
                 SparseBooleanArray array = listView.getCheckedItemPositions();

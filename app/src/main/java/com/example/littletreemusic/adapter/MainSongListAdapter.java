@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * Created by ZLX Vincent on 2017/8/31.
  */
 
-public class SongListRecyclerViewAdapter extends RecyclerView.Adapter<SongListRecyclerViewAdapter.ViewHolder>
+public class MainSongListAdapter extends RecyclerView.Adapter<MainSongListAdapter.ViewHolder>
         implements SectionIndexer {
 
     private List<Song> songs;
@@ -59,7 +59,7 @@ public class SongListRecyclerViewAdapter extends RecyclerView.Adapter<SongListRe
         }
     }
 
-    public SongListRecyclerViewAdapter(List<Song> songs) {
+    public MainSongListAdapter(List<Song> songs) {
         this.songs = songs;
     }
 

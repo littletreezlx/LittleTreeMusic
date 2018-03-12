@@ -1,64 +1,37 @@
 package com.example.littletreemusic.pojo;
 
-public class ServerSongInfo {
-    private int id,pullCounts,pushCount,likeCounts,commentCounts;
-    private long duration,size;
-    private String title,artist;
+import java.util.Date;
 
-    public int getId() {
+public class ServerSongInfo {
+
+    private long id;
+
+    private String title;
+
+    private String artist;
+
+    private int duration;
+
+    private int size;
+
+    private Date firstpushTime;
+
+    private int firstpushUserid;
+
+    private String firstpushDecs;
+
+    private int pushCounts;
+
+    private int pullCounts;
+
+    private int commentCounts;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
-    }
-
-    public int getPullCounts() {
-        return pullCounts;
-    }
-
-    public void setPullCounts(int pullCounts) {
-        this.pullCounts = pullCounts;
-    }
-
-    public int getPushCount() {
-        return pushCount;
-    }
-
-    public void setPushCount(int pushCount) {
-        this.pushCount = pushCount;
-    }
-
-    public int getLikeCounts() {
-        return likeCounts;
-    }
-
-    public void setLikeCounts(int likeCounts) {
-        this.likeCounts = likeCounts;
-    }
-
-    public int getCommentCounts() {
-        return commentCounts;
-    }
-
-    public void setCommentCounts(int commentCounts) {
-        this.commentCounts = commentCounts;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
     }
 
     public String getTitle() {
@@ -75,5 +48,69 @@ public class ServerSongInfo {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public Date getFirstpushTime() {
+        return firstpushTime;
+    }
+
+    public void setFirstpushTime(Date firstpushTime) {
+        this.firstpushTime = firstpushTime;
+    }
+
+    public int getFirstpushUserid() {
+        return firstpushUserid;
+    }
+
+    public void setFirstpushUserid(int firstpushUserid) {
+        this.firstpushUserid = firstpushUserid;
+    }
+
+    public String getFirstpushDecs() {
+        return firstpushDecs;
+    }
+
+    public void setFirstpushDecs(String firstpushDecs) {
+        this.firstpushDecs = firstpushDecs;
+    }
+
+    public int getPushCounts() {
+        return pushCounts;
+    }
+
+    public void setPushCounts(int pushCounts) {
+        this.pushCounts = pushCounts;
+    }
+
+    public int getPullCounts() {
+        return pullCounts;
+    }
+
+    public void setPullCounts(int pullCounts) {
+        this.pullCounts = pullCounts;
+    }
+
+    public int getCommentCounts() {
+        return commentCounts;
+    }
+
+    public void setCommentCounts(int commentCounts) {
+        this.commentCounts = commentCounts;
     }
 }

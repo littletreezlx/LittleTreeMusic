@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 
 import com.example.littletreemusic.R;
+import com.example.littletreemusic.activity.community.CommunityHomeFragment;
 import com.example.littletreemusic.activity.main.MainActivity;
 import com.example.littletreemusic.activity.main.MainBodyFragment;
 import com.example.littletreemusic.activity.main.MainBottomFragment;
@@ -29,6 +30,7 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
     MainSongListFragment songList;
     MainSongListFragment playList;
     MainTagListFragment tagList;
+    CommunityHomeFragment communityHome;
 
     DrawerLayout mDrawerLayout;
     FragmentManager fm;
@@ -45,7 +47,7 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
         this.title0 = new MainTitleFragment();
         this.body0 = new MainBodyFragment();
         this.bottom0 = new MainBottomFragment();
-        transaction.add(R.id.main_title, title0)
+        transaction.add(R.id.main_title, title0,"title0")
                 .add(R.id.main_body, body0)
                 .add(R.id.main_bottom, bottom0);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -142,10 +144,20 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
 
     @Override
     public void toCommunity() {
-
+        communityHome=new CommunityHomeFragment();
+        title0.setTitle("我的歌单");
+        transaction=fm.beginTransaction();
+        transaction.add(R.id.main_body, communityHome,"communityHome")
+                .hide(body0);
+        goOutHome();
     }
     @Override
     public void fromCommunity() {
+        transaction=fm.beginTransaction();
+        transaction.remove(playList)
+                .show(body0);
+        communityHome=null;
+        goBackHome();
         title0.backToHome();
     }
 

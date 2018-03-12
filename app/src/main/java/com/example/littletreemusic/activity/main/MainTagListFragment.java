@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.littletreemusic.R;
-import com.example.littletreemusic.adapter.TagListRecyclerViewAdapter;
+import com.example.littletreemusic.adapter.MainTagListAdapter;
 import com.example.littletreemusic.di.Component.main.DaggerMainTagListComponent;
 import com.example.littletreemusic.di.Component.main.MainTagListComponent;
 import com.example.littletreemusic.di.Component.main.MainTagListModule;
@@ -44,7 +44,7 @@ public class MainTagListFragment extends Fragment implements TagListContract.ITa
     MainFMPresenter mainFMPresenter;
 
     RelativeLayout mbodytemp;
-    TagListRecyclerViewAdapter adapter;
+    MainTagListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
@@ -58,8 +58,8 @@ public class MainTagListFragment extends Fragment implements TagListContract.ITa
         mbodytemp = (RelativeLayout) view.findViewById(R.id.main_body);
         unbinder = ButterKnife.bind(this, view);
 
-        adapter = new TagListRecyclerViewAdapter(getActivity(), tagListPresenter.getTagList());
-        adapter.setOnItemClickLitener(new TagListRecyclerViewAdapter.OnItemClickLitener() {
+        adapter = new MainTagListAdapter(getActivity(), tagListPresenter.getTagList());
+        adapter.setOnItemClickLitener(new MainTagListAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 mainFMPresenter.toOneTagSongList(position, adapter.findTagById(position));

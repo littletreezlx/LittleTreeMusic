@@ -2,20 +2,19 @@ package com.example.littletreemusic.presenter.community;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 
 import com.example.littletreemusic.R;
+import com.example.littletreemusic.activity.community.CommentFragment;
+import com.example.littletreemusic.activity.community.CommunityHomeFragment;
+import com.example.littletreemusic.activity.community.LiveFragment;
+import com.example.littletreemusic.activity.community.MiddleMenuFragment;
+import com.example.littletreemusic.activity.community.RandomPictureFragment;
+import com.example.littletreemusic.activity.community.RandomSongFragment;
+import com.example.littletreemusic.activity.community.SongInfoFragment;
+import com.example.littletreemusic.activity.community.TopSongFragment;
 import com.example.littletreemusic.activity.main.MainActivity;
-import com.example.littletreemusic.activity.navigation.NavAboutFragment;
-import com.example.littletreemusic.activity.navigation.NavAlterPDFragment;
-import com.example.littletreemusic.activity.navigation.NavChangeBPFragment;
-import com.example.littletreemusic.activity.navigation.NavHeadshotsFragment;
-import com.example.littletreemusic.activity.navigation.NavLoginFragment;
-import com.example.littletreemusic.activity.navigation.NavPersonalInfoFragment;
-import com.example.littletreemusic.activity.navigation.NavRegisterFragment;
-import com.example.littletreemusic.activity.navigation.NavSettingFragment;
-import com.example.littletreemusic.presenter.navigation.NavFMContract;
+import com.example.littletreemusic.activity.main.MainTitleFragment;
+import com.example.littletreemusic.activity.play.ViewPagerFragment;
 
 import javax.inject.Inject;
 
@@ -23,216 +22,188 @@ import javax.inject.Inject;
  * Created by 春风亭lx小树 on 2018/2/20.
  */
 
-public class CommunityFMPresenter implements NavFMContract.INavFMPresenter {
+public class CommunityFMPresenter implements CommunityFMContract.ICommunityFMPresenter {
 
     @Inject
     MainActivity mainActivity;
 
+    MainTitleFragment title0;
+    CommunityHomeFragment communityHome;
+    RandomSongFragment randomSong;
+    RandomPictureFragment randomPicture;
+    TopSongFragment topSong;
+    LiveFragment live;
+    SongInfoFragment songInfo;
+    MiddleMenuFragment middleMenu;
+    ViewPagerFragment viewPagerFragment;
+    CommentFragment comment;
 
 
-    public boolean isHomePage=true,isNavigation=false;
-    DrawerLayout mDrawerLayout;
     FragmentManager fm;
     FragmentTransaction transaction;
     public int nowLocation=0;
-    private static final int LOCATION_HOME=0,LOCATION_HEADER=1,LOCATION_PERSONALINFO=2,
-            LOCATION_CHANGEBP=3,LOCATION_ABOUT=4,LOCATION_SETTING=5,LOCATION_LOGIN=6,
-            LOCATION_REGISTER=7,LOCATION_ALTERPD=8;
-
+    private static final int LOCATION_COMMUNITYHOME=0,LOCATION_RANDOMSONG=1,LOCATION_RANDOMPICTURE=2,
+            LOCATION_TOPSONG=3,LOCATION_LIVE=4,LOCATION_SONGINFO=5,LOCATION_COMMENT=6;
 
     @Override
     public void init() {
         fm=mainActivity.getFragmentManager();
-        mDrawerLayout=mainActivity.drawerLayout;
-        nowLocation=LOCATION_HOME;
+        title0=(MainTitleFragment)fm.findFragmentByTag("title0");
+        communityHome=(CommunityHomeFragment) fm.findFragmentByTag("communityHome");
+        nowLocation=LOCATION_COMMUNITYHOME;
     }
 
     @Override
-    public void toNavHeadshots() {
-        headshots=new NavHeadshotsFragment();
+    public void toRandomSong() {
+        randomSong=new RandomSongFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,headshots);
+        transaction.add(R.id.main_body,randomSong,"community1")
+                .hide(communityHome);
         goOutHome();
-        nowLocation=LOCATION_HEADER;
+        nowLocation=LOCATION_RANDOMSONG;
     }
 
     @Override
-    public void fromNavHeadshots() {
+    public void fromRandomSong() {
         transaction=fm.beginTransaction();
-        transaction.remove(headshots);
-        headshots=null;
-        goBackHome();
-    }
-
-
-    @Override
-    public void toNavPersonInfo() {
-        personInfo=new NavPersonalInfoFragment();
-        transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,personInfo);
-        goOutHome();
-        nowLocation=LOCATION_PERSONALINFO;
-    }
-
-    @Override
-    public void fromNavPersonInfo() {
-        transaction=fm.beginTransaction();
-        transaction.remove(personInfo);
-        personInfo=null;
+        transaction.remove(randomSong)
+                .show(communityHome);
+        randomSong=null;
         goBackHome();
     }
 
     @Override
-    public void toNavChangeBP() {
-        changeBP=new NavChangeBPFragment();
+    public void toRandomPicture() {
+        randomPicture=new RandomPictureFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,changeBP);
+        transaction.add(R.id.main_body,randomPicture,"community1")
+                .hide(communityHome);
         goOutHome();
-        nowLocation=LOCATION_CHANGEBP;
+        nowLocation=LOCATION_RANDOMPICTURE;
+    }
+
+    @Override
+    public void fromRandomPicture() {
+        transaction=fm.beginTransaction();
+        transaction.remove(randomPicture)
+                .show(communityHome);
+        randomPicture=null;
+        goBackHome();
 
     }
 
     @Override
-    public void fromNavChangeBP() {
+    public void toTopSong() {
+        topSong=new TopSongFragment();
         transaction=fm.beginTransaction();
-        transaction.remove(changeBP);
-        changeBP=null;
+        transaction.add(R.id.main_body, topSong,"community1")
+                .hide(communityHome);
+        goOutHome();
+        nowLocation=LOCATION_TOPSONG;
+    }
+
+    @Override
+    public void fromTopSong() {
+        transaction=fm.beginTransaction();
+        transaction.remove(topSong)
+                .show(communityHome);
+        topSong=null;
         goBackHome();
     }
 
     @Override
-    public void toNavAbout() {
-        about=new NavAboutFragment();
+    public void toLive() {
+        live=new LiveFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,about);
+        transaction.add(R.id.main_body, live,"community1")
+                .hide(communityHome);
         goOutHome();
-        nowLocation=LOCATION_ABOUT;
+        nowLocation=LOCATION_LIVE;
     }
 
     @Override
-    public void fromNavAbout() {
+    public void fromLive() {
         transaction=fm.beginTransaction();
-        transaction.remove(about);
-        about=null;
+        transaction.remove(live)
+                .show(communityHome);
+        live=null;
         goBackHome();
     }
 
     @Override
-    public void toNavSetting() {
-        setting=new NavSettingFragment();
+    public void toSongInfo() {
+        songInfo=new SongInfoFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,setting);
+        transaction.add(R.id.main_body,songInfo)
+                .hide(fm.findFragmentByTag("community1"));
         goOutHome();
-        nowLocation=LOCATION_SETTING;
+        nowLocation=LOCATION_SONGINFO;
     }
 
     @Override
-    public void fromNavSetting() {
+    public void fromSongInfo() {
         transaction=fm.beginTransaction();
-        transaction.remove(setting);
-        setting=null;
+        transaction.remove(songInfo)
+                .show(fm.findFragmentByTag("community1"));
+        songInfo=null;
         goBackHome();
     }
 
     @Override
-    public void toNavLogin() {
-        login=new NavLoginFragment();
+    public void toComment() {
+        comment=new CommentFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,login);
+        transaction.add(R.id.main_body, live)
+                .hide(songInfo);
         goOutHome();
-        nowLocation=LOCATION_LOGIN;
+        nowLocation=LOCATION_LIVE;
     }
 
     @Override
-    public void FromNavLogin() {
+    public void fromComment() {
         transaction=fm.beginTransaction();
-        transaction.remove(login);
-        login=null;
+        transaction.remove(comment)
+                .show(songInfo);
+        comment=null;
         goBackHome();
-    }
-
-    @Override
-    public void toNavRegister() {
-        register=new NavRegisterFragment();
-        transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,register)
-                .hide(login).show(register);
-        goOutHome();
-        nowLocation=LOCATION_REGISTER;
-    }
-
-    @Override
-    public void FromNavRegister() {
-        transaction=fm.beginTransaction();
-        transaction.remove(register).show(login);
-        register=null;
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-        transaction.commit();
-        nowLocation=LOCATION_LOGIN;
-    }
-
-    @Override
-    public void toNavAlterPD() {
-        alterPD=new NavAlterPDFragment();
-        transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,alterPD)
-                .hide(login).show(alterPD);
-        goOutHome();
-        nowLocation=LOCATION_ALTERPD;
-    }
-
-    @Override
-    public void FromNavAlterPD() {
-        transaction=fm.beginTransaction();
-        transaction.remove(alterPD).show(login);
-        alterPD=null;
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-        transaction.commit();
-        nowLocation=LOCATION_LOGIN;
     }
 
     @Override
     public void backPressed(){
         switch (nowLocation){
-            case LOCATION_HOME:
+            case LOCATION_COMMUNITYHOME:
                 break;
-            case LOCATION_HEADER:
-                fromNavHeadshots();
+            case LOCATION_RANDOMSONG:
+                fromRandomSong();
                 break;
-            case LOCATION_PERSONALINFO:
-                fromNavPersonInfo();
+            case LOCATION_RANDOMPICTURE:
+                fromRandomPicture();
                 break;
-            case LOCATION_CHANGEBP:
-                fromNavChangeBP();
+            case LOCATION_TOPSONG:
+                fromTopSong();
                 break;
-            case LOCATION_ABOUT:
-                fromNavAbout();
+            case LOCATION_LIVE:
+                fromLive();
                 break;
-            case LOCATION_SETTING:
-                fromNavSetting();
+            case LOCATION_SONGINFO:
+                fromSongInfo();
                 break;
-            case LOCATION_LOGIN:
-                FromNavLogin();
-                break;
-            case LOCATION_REGISTER:
-                FromNavRegister();
-                break;
-            case LOCATION_ALTERPD:
-                FromNavAlterPD();
+            case LOCATION_COMMENT:
+                fromComment();
                 break;
             default:break;
         }
     }
 
     private void goOutHome(){
-        mDrawerLayout.closeDrawer(GravityCompat.END);
+
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
     }
     private void goBackHome(){
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         transaction.commit();
-        nowLocation=LOCATION_HOME;
+        nowLocation=LOCATION_COMMUNITYHOME;
     }
 
 

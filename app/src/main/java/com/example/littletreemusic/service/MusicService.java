@@ -226,7 +226,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
         isFirst=false;
         updateRemoteViews();
-        EventBus.getDefault().post(songs.get(playingPosition));
+        EventBus.getDefault().postSticky(songs.get(playingPosition));
     }
 
     @Override

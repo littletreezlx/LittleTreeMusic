@@ -8,6 +8,7 @@ import com.example.littletreemusic.activity.main.MainActivity;
 import com.example.littletreemusic.di.Component.app.AppComponent;
 import com.example.littletreemusic.di.scopes.PerActivity;
 import com.example.littletreemusic.presenter.PicturePresenter;
+import com.example.littletreemusic.presenter.community.CommunityFMPresenter;
 import com.example.littletreemusic.presenter.main.MainActivityPresenter;
 import com.example.littletreemusic.presenter.main.MainFMPresenter;
 import com.example.littletreemusic.presenter.navigation.NavFMPresenter;
@@ -32,6 +33,8 @@ public interface MainActivityComponent {
 
     void inject(MainFMPresenter mainFMPresenter);
 
+    void inject(CommunityFMPresenter communityFMPresenter);
+
     void inject(NavFMPresenter navFMPresenter);
 
     void inject(MainActivityPresenter mainActivityPresenter);
@@ -48,6 +51,7 @@ public interface MainActivityComponent {
 
 
     MainFMPresenter getMainFMPresenter();
+    CommunityFMPresenter getCommunityFMPresenter();
     NavFMPresenter getNavFMPresenter();
     MainActivity getMainActivity();
     MainActivityPresenter getSearchSongPresenter();

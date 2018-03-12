@@ -18,5 +18,23 @@ public interface CommunityFMContract {
 
         void backPressed();
 
+        void toRandomSong();
+        void fromRandomSong();
+
+        void toRandomPicture();
+        void fromRandomPicture();
+
+        void toTopSong();
+        void fromTopSong();
+
+        void toLive();
+        void fromLive();
+
+        void toSongInfo();
+        void fromSongInfo();
+
+        void toComment();
+        void fromComment();
+
     }
 }

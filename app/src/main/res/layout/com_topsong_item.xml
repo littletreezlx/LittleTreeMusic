@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/com_randomsong_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/透明"
+   >
+
+
+    <TextView
+        android:id="@+id/tv_com_topsong_item_tv_number"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_widthPercent="10%w"
+        app:layout_heightPercent="10%w"
+        android:text="0"
+        android:textColor="@color/白色"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_alignParentStart="true"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_com_topsong_item_tv_title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_widthPercent="60%w"
+        app:layout_heightPercent="6%w"
+        android:text="title"
+        android:textColor="@color/recyclerview_color"
+        android:textSize="22sp"
+        android:layout_toEndOf="@id/tv_com_topsong_item_tv_number"
+        />
+
+    <TextView
+        android:id="@+id/tv_com_topsong_item_tv_artist"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_widthPercent="60%w"
+        app:layout_heightPercent="4%w"
+        android:text="artist"
+        android:textSize="14sp"
+        android:textColor="@color/recyclerview_color"
+        android:layout_toEndOf="@id/tv_com_topsong_item_tv_number"
+        android:layout_below="@id/tv_com_topsong_item_tv_title"
+        />
+
+    <TextView
+        android:id="@+id/tv_com_topsong_item_tv_pushtimes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_widthPercent="30%w"
+        app:layout_heightPercent="6%w"
+        android:text="pushtimes"
+        android:textColor="@color/白色"
+        android:textSize="22sp"
+        android:layout_toEndOf="@id/tv_com_topsong_item_tv_title"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_com_topsong_item_tv_commenttimes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_widthPercent="30%w"
+        app:layout_heightPercent="6%w"
+        android:text="commenttimes"
+        android:textColor="@color/白色"
+        android:textSize="22sp"
+        android:layout_toEndOf="@id/tv_com_topsong_item_tv_artist"
+        />
+
+
+
+
+
+
+
+
+
+</com.zhy.android.percent.support.PercentRelativeLayout>
