@@ -1,13 +1,15 @@
 package com.example.littletreemusic.presenter.community;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
-import com.example.littletreemusic.pojo.ServerSongInfo;
-import com.example.littletreemusic.presenter.navigation.NavLoginContract;
+import com.example.littletreemusic.pojo.ServerSong;
 import com.example.littletreemusic.util.CommunityRetrofitRequest;
 import com.example.littletreemusic.util.common.FileUtil;
 import com.example.littletreemusic.util.common.NetworkUtil;
 import com.google.gson.Gson;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -20,7 +22,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
@@ -30,7 +31,7 @@ import retrofit2.Retrofit;
 public class RandomSongPresenter implements RandomSongContract.IRandomSongPresenter{
 
     @Inject
-    NavLoginContract.INavLoginView mINavLoginView;
+    RandomSongContract.IRandomSongView iRandomSongView;
     @Inject
     SharedPreferences sp;
     @Inject
@@ -44,46 +45,53 @@ public class RandomSongPresenter implements RandomSongContract.IRandomSongPresen
 
     @Override
     public void getRandomSongs() {
+
         final CommunityRetrofitRequest communityRR = retrofit.create(CommunityRetrofitRequest.class);
 //       先请求推荐歌单
         communityRR.getRandomSongIdList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer<List<ServerSongInfo>>() {
+                .doOnNext(new Consumer<List<ServerSong>>() {
                     @Override
-                    public void accept(List<ServerSongInfo> serverSongInfos) throws Exception {
-
+                    public void accept(List<ServerSong> serverSongs) throws Exception {
+                        iRandomSongView.fillAdapter(serverSongs);
+                        for (ServerSong serverSong : serverSongs){
+                            List<ServerSong> songs = DataSupport.select("id").find(ServerSong.class);
+                            for (ServerSong exist:songs){
+                                if (exist.getId()== serverSong.getId()){
+                                    break;
+                                }
+                                serverSong.save();
+                            }
+                        }
                     }
                 })
 //                将返回歌单flatmap处理，依此请求getHeadShots
                 .observeOn(Schedulers.io())
-                .flatMap(new Function<List<ServerSongInfo>, ObservableSource<ServerSongInfo>>() {
+                .flatMap(new Function<List<ServerSong>, ObservableSource<ServerSong>>() {
                     @Override
-                    public ObservableSource<ServerSongInfo> apply(List<ServerSongInfo> serverSongInfos) throws Exception {
+                    public ObservableSource<ServerSong> apply(List<ServerSong> serverSongs) throws Exception {
 
-                        return  io.reactivex.Observable.fromIterable(serverSongInfos);
+                        return  io.reactivex.Observable.fromIterable(serverSongs);
                     }
                 })
 //                请求
-                .flatMap(new Function<ServerSongInfo, ObservableSource<Response>>() {
+                .flatMap(new Function<ServerSong, ObservableSource<okhttp3.Response>>() {
                     @Override
-                    public ObservableSource<Response> apply(ServerSongInfo serverSongInfo) throws Exception {
-                        return communityRR.getHeadShots(serverSongInfo.getId());
+                    public ObservableSource<okhttp3.Response> apply(ServerSong serverSong) throws Exception {
+                        return communityRR.getHeadShots(serverSong.getFirstpushUserid());
                     }
                 })
 //                处理getHeadShots
-                .subscribe(new Observer<Response>() {
+                .subscribe(new Observer<okhttp3.Response>() {
                     @Override
                     public void onSubscribe(Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(Response response) {
-                        response.headers().get("filename");
-                        response.body();
-                        fileUtil.
-
+                    public void onNext(okhttp3.Response response) {
+                        fileUtil.saveResponseBody(response);
                     }
 
                     @Override
@@ -93,7 +101,8 @@ public class RandomSongPresenter implements RandomSongContract.IRandomSongPresen
 
                     @Override
                     public void onComplete() {
-
+                        Log.d("randomsong", "onComplete");
+                        iRandomSongView.showList();
                     }
                 });
     }

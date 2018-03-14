@@ -10,6 +10,7 @@ import com.example.littletreemusic.di.scopes.PerActivity;
 import com.example.littletreemusic.presenter.PicturePresenter;
 import com.example.littletreemusic.presenter.play.PlayFMPresenter;
 import com.example.littletreemusic.service.MusicService;
+import com.example.littletreemusic.util.common.FileUtil;
 import com.example.littletreemusic.util.common.NetworkUtil;
 import com.example.littletreemusic.util.common.ToastUtil;
 import com.google.gson.Gson;
@@ -38,6 +39,7 @@ public interface PlayActivityComponent {
     MusicService getMusicService();
     NetworkUtil getNetworkUtil();
     ToastUtil getToastUtil();
+    FileUtil getFileUtil();
 
 
     PlayFMPresenter getPlayFMPresenter();

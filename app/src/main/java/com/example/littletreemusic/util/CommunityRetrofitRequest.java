@@ -2,7 +2,7 @@ package com.example.littletreemusic.util;
 
 import com.example.littletreemusic.pojo.LoginInfo;
 import com.example.littletreemusic.pojo.RegisterMsg;
-import com.example.littletreemusic.pojo.ServerSongInfo;
+import com.example.littletreemusic.pojo.ServerSong;
 
 import java.util.List;
 
@@ -40,11 +40,11 @@ import retrofit2.http.Path;
 
 //    取得随机推荐的歌曲信息
     @GET("random/song")
-    Observable<List<ServerSongInfo>> getRandomSongIdList();
+    Observable<List<ServerSong>> getRandomSongIdList();
 
 //    然后根据返回的歌曲信息list中的id，再请求用户的headshots
     @GET("user/headshots/{id}")
-    Observable<Response> getHeadShots(@Path("id") long id);
+    Observable<okhttp3.Response> getHeadShots(@Path("id") long id);
 
 
 
@@ -54,7 +54,7 @@ import retrofit2.http.Path;
     Observable<Response<String>> postJson(@Body RequestBody requestBody);
 
     @GET("songinfo/pull")
-    Observable<Response<ServerSongInfo>> pullJson();
+    Observable<Response<ServerSong>> pullJson();
 
     @Multipart
     @POST("file/upload")

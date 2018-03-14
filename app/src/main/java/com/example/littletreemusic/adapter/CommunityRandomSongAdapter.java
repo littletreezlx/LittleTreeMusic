@@ -1,6 +1,6 @@
 package com.example.littletreemusic.adapter;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.littletreemusic.R;
-import com.example.littletreemusic.pojo.Song;
+import com.example.littletreemusic.pojo.ServerSong;
 
 import java.util.List;
 
@@ -23,8 +24,7 @@ import butterknife.ButterKnife;
 
 public class CommunityRandomSongAdapter extends RecyclerView.Adapter<CommunityRandomSongAdapter.ViewHolder> {
 
-    private List<Song> songs;
-    private List<Bitmap> pictures;
+    List<ServerSong> serverSongs;
     OnRecyclerClickListener mOnRecyclerClickListener;
 
     public interface OnRecyclerClickListener {
@@ -53,9 +53,8 @@ public class CommunityRandomSongAdapter extends RecyclerView.Adapter<CommunityRa
         }
     }
 
-    public CommunityRandomSongAdapter(List<Song> songs,List<Bitmap> pictures) {
-        this.songs = songs;
-        this.pictures=pictures;
+    public CommunityRandomSongAdapter(List<ServerSong> serverSongs) {
+        this.serverSongs = serverSongs;
     }
 
     @Override
@@ -82,17 +81,17 @@ public class CommunityRandomSongAdapter extends RecyclerView.Adapter<CommunityRa
             }
         });
 
-//        holder.btn_Headshots.setBackground(pictures.get(0));
-        holder.tv_Title.setText(songs.get(0).getTitle());
-        holder.tv_Artist.setText(songs.get(0).getArtist());
-
+        holder.tv_Title.setText(serverSongs.get(position).getTitle());
+        holder.tv_Artist.setText(serverSongs.get(position).getArtist());
+        Uri imageUri = Uri.parse(serverSongs.get(position).getFirstpushHeadShotsUri());
+        Glide.with(this).load(imageUri).into(imageView);
 
     }
 
 
     @Override
     public int getItemCount() {
-        return songs.size();
+        return serverSongs.size();
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.example.littletreemusic.presenter.main.MainActivityPresenter;
 import com.example.littletreemusic.presenter.main.MainFMPresenter;
 import com.example.littletreemusic.presenter.navigation.NavFMPresenter;
 import com.example.littletreemusic.service.MusicService;
+import com.example.littletreemusic.util.common.FileUtil;
 import com.example.littletreemusic.util.common.NetworkUtil;
 import com.example.littletreemusic.util.common.ToastUtil;
 import com.google.gson.Gson;
@@ -47,6 +48,7 @@ public interface MainActivityComponent {
     MusicService getMusicService();
     NetworkUtil getNetworkUtil();
     ToastUtil getToastUtil();
+    FileUtil getFileUtil();
 
 
 

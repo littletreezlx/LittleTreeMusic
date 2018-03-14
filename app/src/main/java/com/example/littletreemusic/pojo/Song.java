@@ -13,8 +13,7 @@ import java.util.List;
 public class Song extends DataSupport {
 
     private int id;
-    private long localId;
-    private int remoteId;
+    private long remoteId;
     private int isFavourite;
 
     private String displayName;
@@ -41,20 +40,12 @@ public class Song extends DataSupport {
         this.id = id;
     }
 
-    public int getRemoteId() {
+    public long getRemoteId() {
         return remoteId;
     }
 
-    public void setRemoteId(int remoteId) {
+    public void setRemoteId(long remoteId) {
         this.remoteId = remoteId;
-    }
-
-    public long getLocalId() {
-        return localId;
-    }
-
-    public void setLocalId(long localId) {
-        this.localId = localId;
     }
 
     public int getIsFavourite() {

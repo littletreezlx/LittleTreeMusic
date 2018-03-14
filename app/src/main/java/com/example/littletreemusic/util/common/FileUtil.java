@@ -1,7 +1,12 @@
 package com.example.littletreemusic.util.common;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
+import com.example.littletreemusic.pojo.ServerSong;
+
+import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,8 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.inject.Inject;
-
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
@@ -19,23 +23,24 @@ import okhttp3.ResponseBody;
 
 public class FileUtil {
 
+    private String appPath,cachePath;
+    private String sdPath;
+    public int nowProgress;
 
-    @Inject
-    public FileUtil() {
+    public FileUtil(Context context) {
+        appPath=context.getFilesDir().getPath()+File.separator;
+        cachePath=context.getCacheDir().getAbsolutePath()
+        sdPath=Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator;
     }
 
 
+    public void saveResponseBody(Response response) {
 
-
-    public void saveResponseBody(ResponseBody body,String fileName) {
-
+        ResponseBody body=response.body();
+        String fileName=response.headers().get("filename");
+        String filePath=appPath+fileName;
         try {
-
-            Environment.getDataDirectory()
-            String sdcardPath2 = Environment.getExternalStorageDirectory().getAbsolutePath()+"/abc";
-
-            File file = new File(sdcardPath2,"travel.mp3");
-
+            File file = new File(filePath);
 //            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "Future Studio Icon.png");
             InputStream inputStream = null;
             OutputStream outputStream = null;
@@ -52,6 +57,7 @@ public class FileUtil {
                     }
                     outputStream.write(fileReader, 0, read);
                     fileSizeDownloaded += read;
+                    nowProgress=(int) (fileSizeDownloaded*100/fileSize);
                     Log.d("TAG", "file download: " + fileSizeDownloaded + " of " + fileSize);
                 }
                 outputStream.flush();
@@ -68,7 +74,17 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        保存路径到数据库
+        Long id = Long.valueOf(response.headers().get("id"));
+        ServerSong serverSong = DataSupport.select("id").findFirst(ServerSong.class);
+        if (serverSong != null){
+            serverSong.setFirstpushHeadShotsUri(filePath);
+            serverSong.save();
+        }
+
     }
+
+
 
 
 

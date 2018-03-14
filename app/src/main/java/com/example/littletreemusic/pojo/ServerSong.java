@@ -1,8 +1,10 @@
 package com.example.littletreemusic.pojo;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.Date;
 
-public class ServerSongInfo {
+public class ServerSong extends DataSupport {
 
     private long id;
 
@@ -18,6 +20,8 @@ public class ServerSongInfo {
 
     private int firstpushUserid;
 
+    private String firstpushHeadShotsUri;
+
     private String firstpushDecs;
 
     private int pushCounts;
@@ -25,6 +29,8 @@ public class ServerSongInfo {
     private int pullCounts;
 
     private int commentCounts;
+
+
 
     public long getId() {
         return id;
@@ -112,5 +118,13 @@ public class ServerSongInfo {
 
     public void setCommentCounts(int commentCounts) {
         this.commentCounts = commentCounts;
+    }
+
+    public String getFirstpushHeadShotsUri() {
+        return firstpushHeadShotsUri;
+    }
+
+    public void setFirstpushHeadShotsUri(String firstpushHeadShotsUri) {
+        this.firstpushHeadShotsUri = firstpushHeadShotsUri;
     }
 }

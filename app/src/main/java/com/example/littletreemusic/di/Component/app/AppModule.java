@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.example.littletreemusic.di.scopes.PerApp;
 import com.example.littletreemusic.presenter.PicturePresenter;
+import com.example.littletreemusic.util.common.FileUtil;
 import com.example.littletreemusic.util.common.NetworkUtil;
 import com.example.littletreemusic.util.common.ToastUtil;
 
@@ -21,12 +22,15 @@ public class AppModule {
     Application application;
     NetworkUtil networkUtil;
     ToastUtil toastUtil;
+    FileUtil fileUtil;
 
     public AppModule(Application application) {
         this.application = application;
         picturePresenter=new PicturePresenter();
         networkUtil=new NetworkUtil(application);
         toastUtil=new ToastUtil(application);
+        fileUtil=new FileUtil(application);
+
     }
 
     @Provides
@@ -39,6 +43,12 @@ public class AppModule {
     @PerApp
     ToastUtil provideToastUtil() {
         return toastUtil;
+    }
+
+    @Provides
+    @PerApp
+    FileUtil provideFileUtil() {
+        return fileUtil;
     }
 
     @Provides

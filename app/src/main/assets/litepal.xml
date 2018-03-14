@@ -5,6 +5,10 @@
     <list>
         <mapping class="com.example.littletreemusic.pojo.Song">
         </mapping>
+
+        <mapping class="com.example.littletreemusic.pojo.ServerSong">
+        </mapping>
     </list>
+
 
 </litepal>
