@@ -19,9 +19,6 @@ public interface MainFMContract {
 
     interface IMainFMPresenter extends IPresenter<IMainFMView> {
 
-
-        void init();
-
 //        跳转歌曲列表
         void toFullSongList();
         void FromFullSongList();

@@ -243,21 +243,21 @@ public class PlayBottomFragment extends Fragment implements PlayBottomContract.I
         builder3.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Song playingSong = DataSupport.where("uri=?", MusicService.playingUriStr).find(Song.class).get(0);
+                Song playingSong = DataSupport.where("uri=?", MusicService.playingUriStr).findFirst(Song.class);
                 int updateId = playingSong.getId();
                 Song updateSong = new Song();
                 updateSong.setTagList(PlayTagsAdapter.adcheckedTags);
                 updateSong.update(updateId);
-
-                SparseBooleanArray array = listView.getCheckedItemPositions();
-                for (int x = 0; x < array.size(); x++) {
-                    int key = array.keyAt(x);
-                    boolean b = array.get(key);
-                    if(b){
-                        //key指的是该item在listview中的position
-                        System.out.println(key);
-                    }
-                }
+//
+//                SparseBooleanArray array = listView.getCheckedItemPositions();
+//                for (int x = 0; x < array.size(); x++) {
+//                    int key = array.keyAt(x);
+//                    boolean b = array.get(key);
+//                    if(b){
+//                        //key指的是该item在listview中的position
+//                        System.out.println(key);
+//                    }
+//                }
                 String str="updateTags";
                 EventBus.getDefault().post(str);
 

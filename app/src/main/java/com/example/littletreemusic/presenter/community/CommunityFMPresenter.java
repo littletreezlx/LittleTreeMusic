@@ -24,8 +24,6 @@ import javax.inject.Inject;
 
 public class CommunityFMPresenter implements CommunityFMContract.ICommunityFMPresenter {
 
-    @Inject
-    MainActivity mainActivity;
 
     MainTitleFragment title0;
     CommunityHomeFragment communityHome;
@@ -45,8 +43,7 @@ public class CommunityFMPresenter implements CommunityFMContract.ICommunityFMPre
     private static final int LOCATION_COMMUNITYHOME=0,LOCATION_RANDOMSONG=1,LOCATION_RANDOMPICTURE=2,
             LOCATION_TOPSONG=3,LOCATION_LIVE=4,LOCATION_SONGINFO=5,LOCATION_COMMENT=6;
 
-    @Override
-    public void init() {
+    public CommunityFMPresenter(MainActivity mainActivity){
         fm=mainActivity.getFragmentManager();
         title0=(MainTitleFragment)fm.findFragmentByTag("title0");
         communityHome=(CommunityHomeFragment) fm.findFragmentByTag("communityHome");

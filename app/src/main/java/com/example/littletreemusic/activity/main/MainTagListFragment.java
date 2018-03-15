@@ -67,7 +67,7 @@ public class MainTagListFragment extends Fragment implements TagListContract.ITa
 
             @Override
             public void onItemLongClick(View view, int position) {
-                Toast.makeText(getActivity(), "long", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "long", Toast.LENGTH_SHORT).show();
             }
         });
 

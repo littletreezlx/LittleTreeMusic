@@ -14,7 +14,6 @@ public interface NavFMContract {
 
     interface INavFMPresenter extends IPresenter<INavFMView> {
 
-        void init();
 
         void toNavHeadshots();
         void fromNavHeadshots();

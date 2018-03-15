@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/play_title_titletv"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="32dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="歌名"
@@ -21,7 +21,7 @@
         android:singleLine="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:textColor="@color/白色"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:layout_marginTop="10dp"
 
         />
@@ -30,10 +30,10 @@
         android:id="@+id/play_title_artisttv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/play_title_titletv"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/白色"
         android:text="歌手"
         />

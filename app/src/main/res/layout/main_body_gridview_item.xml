@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:text="音乐"
         android:gravity="center"
-        android:textSize="35sp"
+        android:textSize="30sp"
         android:textColor="@color/白色"
         android:layout_below="@id/fragment_body_gridview_image"
         />

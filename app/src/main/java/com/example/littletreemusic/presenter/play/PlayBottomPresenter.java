@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,9 +40,10 @@ public class PlayBottomPresenter implements PlayBottomContract.IPlayBottomPresen
 //    保存新标签
     public void saveNewTag(String newTagName){
         tagSet = sp.getStringSet("TagSet", null);
-        if (tagSet != null) {
-            tagSet.add(newTagName);
+        if (tagSet == null) {
+            tagSet=new HashSet<>();
         }
+        tagSet.add(newTagName);
         SharedPreferences.Editor editor = sp.edit();
         editor.remove("TagSet");
         editor.putStringSet("TagSet", tagSet);

@@ -1,6 +1,7 @@
 package com.example.littletreemusic.presenter.main;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -35,14 +36,14 @@ public class MainActivityPresenter implements MainActivityContract.IMainActivity
     @Inject
     Retrofit retrofit;
     @Inject
-    MainActivityContract.IMainActivityView iMainActivityView;
+    MainActivityContract.IMainActivityView mainActivityView;
 
 
     private Uri externalContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     private Uri internalContentUri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
     private String sortOrder = MediaStore.Audio.Media.TITLE;
 
-    private ContentResolver mContentResolver;
+    private ContentResolver contentResolver;
     private List<Song> songList;
     private Song playingSong;
 //    MainActivityContract.ISearchSongIview mISearchSongIview;
@@ -66,8 +67,8 @@ public class MainActivityPresenter implements MainActivityContract.IMainActivity
 //        mISearchSongIview=view;
 //    }
 
-    public void init(ContentResolver contentResolver) {
-       mContentResolver=contentResolver;
+    public MainActivityPresenter(Context context) {
+        contentResolver=context.getContentResolver();
     }
 
     @Override
@@ -85,18 +86,18 @@ public class MainActivityPresenter implements MainActivityContract.IMainActivity
                     @Override
                     public void accept(Response<ResponseBody> body) throws Exception {
 //                        Log.d("a",body);
-                        String uuid=body.body().string();
-                        if (uuid.length()==16){
-                            iMainActivityView.autoLoginSucceed();
-                            sp.edit().putString("uuid",uuid).apply();
+                        String token=body.body().string();
+                        if (!token.isEmpty()){
+                            mainActivityView.autoLoginSucceed();
+                            sp.edit().putString("Authorization",token).apply();
                         }else {
-                            iMainActivityView.autoLoginFaided();
+                            mainActivityView.autoLoginFaided();
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        iMainActivityView.autoLoginFaided();
+                        mainActivityView.autoLoginFaided();
                     }
                 });
 
@@ -104,55 +105,62 @@ public class MainActivityPresenter implements MainActivityContract.IMainActivity
 
     @Override
     public void searchSongs() {
+        mainActivityView.showWaitingView();
         //        LitePal.getDatabase();
         //利用ContentResolver的query函数来查询数据，然后将得到的结果放到Song对象中，最后放到数组中
-        Cursor cursor = mContentResolver.query(externalContentUri, null, where, null, sortOrder);
-        
+        Cursor cursor = contentResolver.query(externalContentUri, null, where, null, sortOrder);
 
-        List<Song> songs = DataSupport.findAll(Song.class);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    if (songs.size() != 0) {
-                        boolean hasSameSong =false;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Cursor cursor = contentResolver.query(externalContentUri, null, where, null, sortOrder);
+                List<Song> songs = DataSupport.findAll(Song.class);
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            if (songs.size() != 0) {
+                                boolean hasSameSong =false;
 //                       如果songs包含指针得到的音乐localId，则说明是已存在的音乐,从songs中移去.
 //                       最后剩下的songs则是曾经添加过，但现在不存在于手机存储中的歌曲。 需要在数据库中删除数据。
-                        long localId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));//音乐本地id
-                        for (int i = 0; i < songs.size(); i++) {
-                            hasSameSong = false;
-                            if (songs.get(i).getLocalId() == localId) {
+                                long localId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));//音乐本地id
+                                for (int i = 0; i < songs.size(); i++) {
+                                    hasSameSong = false;
+                                    if (songs.get(i).getLocalId() == localId) {
 //                                虽然文件的localId是唯一值，但不排除该文件删除后，
 //                                又产生同一localId的文件。所以在加一重title判断比较保险。
-                                String title = cursor.getString((cursor
-                                        .getColumnIndex(MediaStore.Audio.Media.TITLE)));//音乐标题
-                                if (songs.get(i).getTitle().equals(title)){
-                                    hasSameSong = true;
-                                    songs.remove(i);
-                                    break;
+                                        String title = cursor.getString((cursor
+                                                .getColumnIndex(MediaStore.Audio.Media.TITLE)));//音乐标题
+                                        if (songs.get(i).getTitle().equals(title)){
+                                            hasSameSong = true;
+                                            songs.remove(i);
+                                            break;
+                                        }
+                                    }
                                 }
-                            }
-                        }
 //                        添加不存在于数据库中的歌曲
-                        if (!hasSameSong){
-                            saveSongInfoToDB(cursor);
-                        }
+                                if (!hasSameSong){
+                                    saveSongInfoToDB(cursor);
+                                }
 //                        表示数据库无歌曲信息，第一次添加歌曲，全部注入
-                    }else {
-                        saveSongInfoToDB(cursor);
+                            }else {
+                                saveSongInfoToDB(cursor);
+                            }
+                        }while (cursor.moveToNext());
                     }
-                }while (cursor.moveToNext());
-            }
-            cursor.close();
-        }
+                    cursor.close();
+                    mainActivityView.cancelWaitingView();
+                }
 
 //        List<Song> ss=songs;
 //        最后删除现在不存在于手机存储中的歌曲
-        for (Song lostSong:songs){
+                for (Song lostSong:songs){
 //            if (lostSong.isSaved()){
 //                lostSong.delete();
 //            }
-            DataSupport.delete(Song.class,lostSong.getId());
-        }
+                    DataSupport.delete(Song.class,lostSong.getId());
+                }
+            }
+        }).run();
     }
 
     private void saveSongInfoToDB(Cursor cursor) {

@@ -13,6 +13,7 @@ import java.util.List;
 public class Song extends DataSupport {
 
     private int id;
+    private long localId;
     private long remoteId;
     private int isFavourite;
 
@@ -38,6 +39,14 @@ public class Song extends DataSupport {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public long getLocalId() {
+        return localId;
+    }
+
+    public void setLocalId(long localId) {
+        this.localId = localId;
     }
 
     public long getRemoteId() {

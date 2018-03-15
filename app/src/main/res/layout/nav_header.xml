@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="登陆"
         android:textSize="20sp"
-        android:textColor="@color/白色"
+        android:textColor="@color/黑色"
         android:background="@drawable/selector_btntext_pressed"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"

@@ -14,12 +14,14 @@ import com.example.littletreemusic.di.Component.play.DaggerPlayTitleComponent;
 import com.example.littletreemusic.di.Component.play.PlayTitleComponent;
 import com.example.littletreemusic.di.Component.play.PlayTitleModule;
 import com.example.littletreemusic.pojo.Song;
+import com.example.littletreemusic.pojo.StringEvent;
 import com.example.littletreemusic.presenter.play.PlayTitleContract;
 import com.example.littletreemusic.presenter.play.PlayTitlePresenter;
 import com.example.littletreemusic.service.MusicService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
@@ -93,7 +95,7 @@ public class PlayTitleFragment extends Fragment implements PlayTitleContract.IPl
     }
 
 
-    @Subscribe
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(Song song) {
         tv_Title.setText(song.getTitle());
         tv_Artist.setText(song.getArtist());
@@ -101,6 +103,13 @@ public class PlayTitleFragment extends Fragment implements PlayTitleContract.IPl
         for (String tag : song.getTagList()) {
             tv_Tags.append("  " + tag);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(StringEvent stringEvent) {
+       if (stringEvent.getStr().equals("updateTags")){
+           updataTags();
+       }
     }
 
 

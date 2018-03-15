@@ -97,9 +97,8 @@ public class PlayTagsAdapter extends BaseAdapter {
             });
             holder.tagcb.setText(tagName);
 //            选中标签列表中正在播放的歌曲的标签项。
-            List<Song> playingList = DataSupport.where("uri=?", MusicService.playingUriStr).find(Song.class);
-            if (playingList !=null && playingList.size() != 0) {
-                Song playingSong = playingList.get(0);
+            Song playingSong = DataSupport.where("uri=?", MusicService.playingUriStr).findFirst(Song.class);
+            if (playingSong !=null) {
                 List<String> pstList=playingSong.getTagList();
                 if (pstList.contains(tagName)){
                     holder.tagcb.setChecked(true);

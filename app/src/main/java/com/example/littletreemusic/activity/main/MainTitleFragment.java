@@ -96,6 +96,15 @@ public class MainTitleFragment extends Fragment implements MainTitleContract.IMa
         btn_Search.setVisibility(View.GONE);
     }
 
+    public void showButton(){
+        btn_Back.setVisibility(View.VISIBLE);
+        btn_Search.setVisibility(View.VISIBLE);
+    }
+
+    public void hideButton(){
+
+    }
+
 }
 
 

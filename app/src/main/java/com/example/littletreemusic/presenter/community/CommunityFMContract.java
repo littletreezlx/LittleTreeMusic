@@ -14,8 +14,6 @@ public interface CommunityFMContract {
 
     interface ICommunityFMPresenter extends IPresenter<ICommunityFMView> {
 
-        void init();
-
         void backPressed();
 
         void toRandomSong();

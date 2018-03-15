@@ -49,7 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!isAllowScreenRoate) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        hideBottomUIMenu();
+//        hideBottomUIMenu();
 //      判断手机是否有物理按钮，然后计算底部的NavigationBar高度，最后设置试图边距。
         int navigationBarHeight=getNavigationBarHeight();
         if (navigationBarHeight!=0){

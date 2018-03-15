@@ -20,6 +20,7 @@ import com.example.littletreemusic.view.BarChart;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import javax.inject.Inject;
 
@@ -47,7 +48,7 @@ public class ViewPagerFragment0 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.play_viewpager0, container, false);
         unbinder = ButterKnife.bind(this, view);
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
             barChart=new BarChart(getActivity());
@@ -74,7 +75,9 @@ public class ViewPagerFragment0 extends Fragment {
             @Override
             public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform,
                                               int samplingRate) {
-                barChart.updateVisualizer(waveform);
+                if (barChart != null){
+                    barChart.updateVisualizer(waveform);
+                }
             }
 
             @Override
@@ -120,12 +123,12 @@ public class ViewPagerFragment0 extends Fragment {
             mVisualizer = null;
         }
         unbinder.unbind();
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe
-    public void onEvent(Song song) {
-        setVisualizer();
-    }
+//    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
+//    public void onEvent(Song song) {
+//        setVisualizer();
+//    }
 
 }

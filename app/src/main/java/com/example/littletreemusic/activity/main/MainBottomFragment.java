@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.littletreemusic.R;
 import com.example.littletreemusic.activity.play.PlayActivity;
 import com.example.littletreemusic.di.Component.main.DaggerMainBottomComponent;
@@ -77,7 +78,7 @@ public class MainBottomFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
 
-        updateAll();
+//        updateAll();
         return view;
     }
 
@@ -96,18 +97,18 @@ public class MainBottomFragment extends Fragment {
 //        }
 //    }
 
-    //更新歌名，歌手,封面
-    public void updateAll() {
-        if (playingSong != null) {
-            tv_Title.setText(playingSong.getTitle());
-            tv_Artist.setText(playingSong.getArtist());
-            Bitmap bitmap = picturePresenter.findBitmapByFilePath(playingSong.getUri());
-            if (bitmap != null) {
-                btn_Album.setImageBitmap(bitmap);
-            }
-//            updateButton();
-        }
-    }
+//    //更新歌名，歌手,封面
+//    public void updateAll() {
+//        if (playingSong != null) {
+//            tv_Title.setText(playingSong.getTitle());
+//            tv_Artist.setText(playingSong.getArtist());
+//            Bitmap bitmap = picturePresenter.findBitmapByFilePath(playingSong.getUri());
+//            if (bitmap != null) {
+//                btn_Album.setImageBitmap(bitmap);
+//            }
+////            updateButton();
+//        }
+//    }
 
 
 
@@ -123,14 +124,17 @@ public class MainBottomFragment extends Fragment {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(Song song) {
+        tv_Title.setText(song.getTitle());
+        tv_Artist.setText(song.getArtist());
         Bitmap bitmap = picturePresenter.findBitmapByFilePath(song.getUri());
         if (bitmap != null){
             btn_Album.setImageBitmap(bitmap);
+//            Glide.with(this).load(bitmap).into(btn_Album);
         }
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
     public void onEvent(StringEvent stringEvent) {
        switch (stringEvent.getStr()){
            case "start":
@@ -182,7 +186,7 @@ public class MainBottomFragment extends Fragment {
                 break;
             case R.id.main_bottom_imgnext:
                 musicService.toNextSong(1);
-                updateAll();
+//                updateAll();
                 break;
             case R.id.main_bottom_imgmenu:
                 mainActivity.drawerLayout.openDrawer(GravityCompat.END);

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.littletreemusic.R;
 import com.example.littletreemusic.pojo.Song;
 import com.example.littletreemusic.presenter.PicturePresenter;
@@ -61,6 +62,7 @@ public class ViewPagerFragment1 extends Fragment {
         Bitmap bitmap = picturePresenter.findBitmapByFilePath(song.getUri());
         if (bitmap != null){
             iv_album.setImageBitmap(bitmap);
+//            Glide.with(this).load(bitmap).into(iv_album);
         }
     }
 

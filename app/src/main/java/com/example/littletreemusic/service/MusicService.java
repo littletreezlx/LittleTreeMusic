@@ -198,7 +198,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         isPaused=false;
         updateRemoteViews();
         StringEvent stringEvent=new StringEvent("start");
-        EventBus.getDefault().post(stringEvent);
+        EventBus.getDefault().postSticky(stringEvent);
     }
 
     public void pause(){
@@ -208,7 +208,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             isPaused=true;
             updateRemoteViews();
             StringEvent stringEvent=new StringEvent("pause");
-            EventBus.getDefault().post(stringEvent);
+            EventBus.getDefault().postSticky(stringEvent);
         }
     }
 
@@ -354,7 +354,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     private void initLastSongListAndSong(){
         songs = new ArrayList<>();
-        int lastSongList=sp.getInt("LastSongList",0);
+        int lastSongList=sp.getInt("LastSongList",-2);
         switch (lastSongList){
             case -2:
                 songs = DataSupport.findAll(Song.class);
@@ -386,6 +386,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             try {
                 mediaPlayer.setDataSource(getApplicationContext(),uri);
                 mediaPlayer.prepare();
+                playingUriStr=uriStr;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -433,16 +434,15 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public void postSongInfoByEventBus(){
-        EventBus.getDefault().post(songs.get(playingPosition));
+        EventBus.getDefault().postSticky(songs.get(playingPosition));
         if (isPlaying){
             StringEvent stringEvent=new StringEvent("start");
-            EventBus.getDefault().post(stringEvent);
+            EventBus.getDefault().postSticky(stringEvent);
         }else if (isPaused){
             StringEvent stringEvent=new StringEvent("pause");
-            EventBus.getDefault().post(stringEvent);
+            EventBus.getDefault().postSticky(stringEvent);
         }
     }
-
 
 
 

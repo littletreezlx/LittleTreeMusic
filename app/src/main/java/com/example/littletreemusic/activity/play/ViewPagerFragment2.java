@@ -14,6 +14,7 @@ import com.example.littletreemusic.pojo.QuerySong;
 import com.example.littletreemusic.pojo.Song;
 import com.example.littletreemusic.service.MusicService;
 import com.example.littletreemusic.util.ShowApiRetrofitRequest;
+import com.example.littletreemusic.util.common.ToastUtil;
 import com.example.littletreemusic.view.LyricView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -53,6 +54,8 @@ public class ViewPagerFragment2 extends Fragment {
 
     @Inject
     MusicService musicService;
+    @Inject
+    ToastUtil toastUtil;
 
     String lrcStr;
     ShowApiRetrofitRequest showApiRequest;
@@ -67,6 +70,7 @@ public class ViewPagerFragment2 extends Fragment {
 //            lyricView.setLrc(lrcStr);
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
+        initRetrofit();
         return view;
     }
 
@@ -122,6 +126,7 @@ public class ViewPagerFragment2 extends Fragment {
                             showToast();
                         }catch (Exception e) {
                         e.printStackTrace();
+                        showToast();
                     }
                 }
             }, new Consumer<Throwable>() {
@@ -157,7 +162,7 @@ public class ViewPagerFragment2 extends Fragment {
     }
 
     public void showToast(){
-        Toast.makeText(getActivity(), "获取歌词失败", Toast.LENGTH_SHORT).show();
+        toastUtil.showShort("获取歌词失败");
     }
 
     @Override

@@ -34,7 +34,7 @@ public class MainBodyFragment extends Fragment {
 
     RelativeLayout mBodytemp;
 
-    private String[] titles = new String[]{"音乐", "最爱", "分类", "文件"};
+    private String[] titles = new String[]{"音乐", "最爱", "分类", "社区"};
     private int[] images = new int[]{R.drawable.icon_note1, R.drawable.icon_favorites, R.drawable.icon_folder2, R.drawable.icon_folder};
 
 

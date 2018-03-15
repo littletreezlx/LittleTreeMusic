@@ -32,7 +32,7 @@ public class SongListPresenter implements SongListContract.ISongListPresenter {
     @Inject
     SongListContract.ISongListView mISongListView;
 
-    private List<Song> songList;
+    private List<Song> songList=new ArrayList<>();
     private Song playingSong;
 
 //    @Override
@@ -52,7 +52,7 @@ public class SongListPresenter implements SongListContract.ISongListPresenter {
     @Override
     public List<Song> findSongListByTagPosition(int position){
 
-        songList=new ArrayList<>();
+        songList.clear();
         switch (position) {
             case -2:
                 songList = DataSupport.findAll(Song.class);
@@ -65,10 +65,12 @@ public class SongListPresenter implements SongListContract.ISongListPresenter {
                 Set tagSet = sp.getStringSet("TagSet", null);
                 tagList.addAll(tagSet);
                 String tagName = tagList.get(position);
-                songList = DataSupport.findAll(Song.class);
-                for (int i = 0; i < songList.size(); i++) {
-                    if (!songList.get(i).getTagList().contains(tagName)) {
-                        songList.remove(i);
+
+                List<Song> allSongList = DataSupport.findAll(Song.class);
+
+                for (Song song : allSongList) {
+                    if (song.getTagList().contains(tagName)) {
+                        songList.add(song);
                     }
                 }
                 break;

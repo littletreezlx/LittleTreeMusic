@@ -1,5 +1,6 @@
 package com.example.littletreemusic.adapter;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ public class CommunityRandomSongAdapter extends RecyclerView.Adapter<CommunityRa
 
     List<ServerSong> serverSongs;
     OnRecyclerClickListener mOnRecyclerClickListener;
+    Context context;
 
     public interface OnRecyclerClickListener {
         void onImageClick(View view, int position);
@@ -53,8 +55,9 @@ public class CommunityRandomSongAdapter extends RecyclerView.Adapter<CommunityRa
         }
     }
 
-    public CommunityRandomSongAdapter(List<ServerSong> serverSongs) {
+    public CommunityRandomSongAdapter(Context context,List<ServerSong> serverSongs) {
         this.serverSongs = serverSongs;
+        this.context=context;
     }
 
     @Override
@@ -84,10 +87,8 @@ public class CommunityRandomSongAdapter extends RecyclerView.Adapter<CommunityRa
         holder.tv_Title.setText(serverSongs.get(position).getTitle());
         holder.tv_Artist.setText(serverSongs.get(position).getArtist());
         Uri imageUri = Uri.parse(serverSongs.get(position).getFirstpushHeadShotsUri());
-        Glide.with(this).load(imageUri).into(imageView);
-
+        Glide.with(context).load(imageUri).into(holder.btn_Headshots);
     }
-
 
     @Override
     public int getItemCount() {

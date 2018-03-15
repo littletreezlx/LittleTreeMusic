@@ -100,12 +100,13 @@ public class NavRegisterFragment extends BaseFragment implements NavRegisterCont
             }
         });
 
-        spinner_Favourite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                favouriteStyle=adapterView.getItemAtPosition(i).toString();
-            }
-        });
+
+//        spinner_Favourite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                favouriteStyle=adapterView.getItemAtPosition(i).toString();
+//            }
+//        });
         return view;
     }
 

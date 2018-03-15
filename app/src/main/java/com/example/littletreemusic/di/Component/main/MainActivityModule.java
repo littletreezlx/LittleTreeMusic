@@ -33,10 +33,10 @@ public class MainActivityModule {
         this.mainActivity=mainActivity;
 //        mMainFMPresenter=new MainFMPresenter(mainActivity.getFragmentManager(),
 //                mainActivity.drawerLayout);
-        navFMPresenter=new NavFMPresenter();
-        mainFMPresenter=new MainFMPresenter();
-        communityFMPresenter=new CommunityFMPresenter();
-        mainActivityPresenter =new MainActivityPresenter();
+        navFMPresenter=new NavFMPresenter(mainActivity);
+        mainFMPresenter=new MainFMPresenter(mainActivity);
+        communityFMPresenter=new CommunityFMPresenter(mainActivity);
+        mainActivityPresenter =new MainActivityPresenter(mainActivity);
 
     }
 

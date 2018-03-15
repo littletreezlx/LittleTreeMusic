@@ -13,7 +13,6 @@ public class ToastUtil {
 
     public ToastUtil(Context context) {
         this.context=context;
-        throw new UnsupportedOperationException("cannot be instantiated");
     }
 
     public void showShort(CharSequence message)

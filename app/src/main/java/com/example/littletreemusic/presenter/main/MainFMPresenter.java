@@ -19,11 +19,6 @@ import javax.inject.Inject;
 
 public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
 
-
-    @Inject
-    MainActivity mainActivity;
-
-
     MainTitleFragment title0;
     MainBodyFragment body0;
     MainBottomFragment bottom0;
@@ -39,8 +34,7 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
     public boolean isHomePage=true;
 
 
-    @Override
-    public void init() {
+    public MainFMPresenter(MainActivity mainActivity){
         mDrawerLayout=mainActivity.drawerLayout;
         fm=mainActivity.getFragmentManager();
         transaction=fm.beginTransaction();
@@ -107,6 +101,7 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
         transaction=fm.beginTransaction();
         transaction.add(R.id.main_body, tagList)
                 .hide(body0);
+        title0.setTitle("我的标签");
         goOutHome();
     }
 
@@ -124,28 +119,33 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
     @Override
     public void toOneTagSongList(int tagPosition,String tagName) {
         songList=new MainSongListFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt("mode",tagPosition);
+        songList.setArguments(bundle);
         title0.setTitle(tagName);
         transaction=fm.beginTransaction();
         transaction.add(R.id.main_body, songList)
                 .hide(tagList);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.commit();
     }
     @Override
     public void FromOneTagSongList() {
-        title0.backToHome();
+        title0.setTitle("我的标签");
         transaction=fm.beginTransaction();
         transaction.remove(songList)
                 .show(tagList);
         songList=null;
 
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+        transaction.commit();
     }
 
 
     @Override
     public void toCommunity() {
         communityHome=new CommunityHomeFragment();
-        title0.setTitle("我的歌单");
+        title0.setTitle("交流社区");
         transaction=fm.beginTransaction();
         transaction.add(R.id.main_body, communityHome,"communityHome")
                 .hide(body0);
@@ -154,7 +154,7 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
     @Override
     public void fromCommunity() {
         transaction=fm.beginTransaction();
-        transaction.remove(playList)
+        transaction.remove(communityHome)
                 .show(body0);
         communityHome=null;
         goBackHome();
@@ -172,6 +172,8 @@ public class MainFMPresenter implements MainFMContract.IMainFMPresenter{
             FromOneTagSongList();
         }else if (tagList != null){
             FromTagList();
+        }else if (communityHome != null){
+            fromCommunity();
         }
     }
 

@@ -29,7 +29,7 @@ public class FileUtil {
 
     public FileUtil(Context context) {
         appPath=context.getFilesDir().getPath()+File.separator;
-        cachePath=context.getCacheDir().getAbsolutePath()
+        cachePath=context.getCacheDir().getAbsolutePath()+File.separator;
         sdPath=Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator;
     }
 
@@ -45,7 +45,7 @@ public class FileUtil {
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {
-                byte[] fileReader = new byte[4096];
+                byte[] fileReader = new byte[2048];
                 long fileSize = body.contentLength();
                 long fileSizeDownloaded = 0;
                 inputStream = body.byteStream();
@@ -76,7 +76,7 @@ public class FileUtil {
         }
 //        保存路径到数据库
         Long id = Long.valueOf(response.headers().get("id"));
-        ServerSong serverSong = DataSupport.select("id").findFirst(ServerSong.class);
+        ServerSong serverSong = DataSupport.where("id=?",id.toString()).findFirst(ServerSong.class);
         if (serverSong != null){
             serverSong.setFirstpushHeadShotsUri(filePath);
             serverSong.save();

@@ -76,7 +76,7 @@ public class RandomSongFragment extends Fragment implements RandomSongContract.I
 
     @Override
     public void fillAdapter(List<ServerSong> serverSongs) {
-        adapter = new CommunityRandomSongAdapter(serverSongs);
+        adapter = new CommunityRandomSongAdapter(getActivity(),serverSongs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

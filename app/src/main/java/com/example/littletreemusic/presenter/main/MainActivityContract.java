@@ -16,6 +16,8 @@ public interface MainActivityContract {
         void autoLoginFaided();
 
         void showWaitingView();
+
+        void cancelWaitingView();
     }
 
 

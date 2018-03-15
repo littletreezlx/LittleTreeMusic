@@ -2,6 +2,7 @@ package com.example.littletreemusic.presenter.navigation;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
@@ -24,8 +25,6 @@ import javax.inject.Inject;
 
 public class NavFMPresenter implements NavFMContract.INavFMPresenter {
 
-    @Inject
-    MainActivity mainActivity;
 
     NavHeadshotsFragment headshots;
     NavPersonalInfoFragment personInfo;
@@ -46,18 +45,18 @@ public class NavFMPresenter implements NavFMContract.INavFMPresenter {
             LOCATION_REGISTER=7,LOCATION_ALTERPD=8;
 
 
-    @Override
-    public void init() {
+    public NavFMPresenter(MainActivity mainActivity){
         fm=mainActivity.getFragmentManager();
         mDrawerLayout=mainActivity.drawerLayout;
         nowLocation=LOCATION_HOME;
     }
 
+
     @Override
     public void toNavHeadshots() {
         headshots=new NavHeadshotsFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,headshots);
+        transaction.add(R.id.drawer_layout,headshots);
         goOutHome();
         nowLocation=LOCATION_HEADER;
     }
@@ -75,7 +74,7 @@ public class NavFMPresenter implements NavFMContract.INavFMPresenter {
     public void toNavPersonInfo() {
         personInfo=new NavPersonalInfoFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,personInfo);
+        transaction.add(R.id.drawer_layout,personInfo);
         goOutHome();
         nowLocation=LOCATION_PERSONALINFO;
     }
@@ -92,7 +91,7 @@ public class NavFMPresenter implements NavFMContract.INavFMPresenter {
     public void toNavChangeBP() {
         changeBP=new NavChangeBPFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,changeBP);
+        transaction.add(R.id.drawer_layout,changeBP);
         goOutHome();
         nowLocation=LOCATION_CHANGEBP;
 
@@ -110,7 +109,7 @@ public class NavFMPresenter implements NavFMContract.INavFMPresenter {
     public void toNavAbout() {
         about=new NavAboutFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,about);
+        transaction.add(R.id.drawer_layout,about);
         goOutHome();
         nowLocation=LOCATION_ABOUT;
     }
@@ -127,7 +126,7 @@ public class NavFMPresenter implements NavFMContract.INavFMPresenter {
     public void toNavSetting() {
         setting=new NavSettingFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,setting);
+        transaction.add(R.id.drawer_layout,setting);
         goOutHome();
         nowLocation=LOCATION_SETTING;
     }
@@ -144,7 +143,7 @@ public class NavFMPresenter implements NavFMContract.INavFMPresenter {
     public void toNavLogin() {
         login=new NavLoginFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,login);
+        transaction.add(R.id.drawer_layout,login);
         goOutHome();
         nowLocation=LOCATION_LOGIN;
     }
@@ -161,7 +160,7 @@ public class NavFMPresenter implements NavFMContract.INavFMPresenter {
     public void toNavRegister() {
         register=new NavRegisterFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,register)
+        transaction.add(R.id.drawer_layout,register)
                 .hide(login).show(register);
         goOutHome();
         nowLocation=LOCATION_REGISTER;
@@ -181,7 +180,7 @@ public class NavFMPresenter implements NavFMContract.INavFMPresenter {
     public void toNavAlterPD() {
         alterPD=new NavAlterPDFragment();
         transaction=fm.beginTransaction();
-        transaction.add(R.id.main_activity_layout,alterPD)
+        transaction.add(R.id.drawer_layout,alterPD)
                 .hide(login).show(alterPD);
         goOutHome();
         nowLocation=LOCATION_ALTERPD;
